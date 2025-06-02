@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: snmptraps
+      POSTGRES_USER: trapuser
+      POSTGRES_PASSWORD: trappassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
+  snmptrapd:
+    build: ./snmptrapd
+    ports:
+      - "162:162/udp"
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: snmptraps
+      POSTGRES_USER: trapuser
+      POSTGRES_PASSWORD: trappassword
+      SNMP_AUTH_USER: trapuser
+      SNMP_AUTH_PASSWORD: authpass123
+      SNMP_PRIV_PASSWORD: privpass123
+      SNMP_AUTH_PROTOCOL: SHA
+      SNMP_PRIV_PROTOCOL: AES
+
+  trap-generator:
+    image: python:3.9-slim
+    depends_on:
+      - snmptrapd
+    volumes:
+      - ./test:/test
+    command: ["tail", "-f", "/dev/null"] # Keeps container running
+
+volumes:
+  postgres_data:
