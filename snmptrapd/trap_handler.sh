@@ -77,3 +77,5 @@ declare -a VALUES=()
 # Set proper permissions
 chmod 644 "$LOG_FILE"
 exit 0
+
+#TODO: Receiving traps twice when tri
