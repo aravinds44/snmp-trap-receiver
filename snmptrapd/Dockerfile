@@ -1,19 +1,39 @@
-FROM python:3.9-slim
+FROM alpine:3.18
 
-RUN apt-get update && \
-    apt-get install -y snmp snmptrapd libsnmp-dev && \
-    rm -rf /var/lib/apt/lists/*
+# Install net-snmp and dependencies
+RUN apk add --no-cache \
+    net-snmp \
+    net-snmp-tools \
+    bash \
+    curl \
+    && rm -rf /var/cache/apk/*
 
-WORKDIR /app
-COPY . .
+# Create snmp user and directories
+RUN addgroup -g 1001 snmp && \
+    adduser -D -u 1001 -G snmp snmp && \
+    mkdir -p /var/lib/snmp /var/log/snmp /etc/snmp && \
+    chown -R snmp:snmp /var/lib/snmp /var/log/snmp /etc/snmp
 
-RUN pip install psycopg2-binary pysnmp pycryptodomex && \
-    chmod +x /app/trap_handler.py
+# Copy configuration and scripts
+COPY snmptrapd.conf /etc/snmp/snmptrapd.conf
+COPY trap_handler.sh /usr/local/bin/trap_handler.sh
 
-# Configure snmptrapd
-RUN mv /app/snmptrapd.conf /etc/snmp/snmptrapd.conf && \
-    echo "createUser -e 0x0123456789 trapuser SHA \"authpass123\" AES \"privpass123\"" >> /var/lib/snmp/snmpd.conf
+# Make scripts executable
+RUN chmod +x /usr/local/bin/trap_handler.sh
 
+# Create log file
+RUN touch /var/log/snmp/snmptrapd.log && \
+    chown snmp:snmp /var/log/snmp/snmptrapd.log
+
+# Switch to snmp user
+USER snmp
+
+# Expose SNMP trap port
 EXPOSE 162/udp
 
-CMD ["sh", "-c", "snmptrapd -f -Lo -c /etc/snmp/snmptrapd.conf"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD pgrep snmptrapd || exit 1
+
+# Start snmptrapd
+CMD ["snmptrapd", "-f", "-Lo", "-c", "/etc/snmp/snmptrapd.conf"]

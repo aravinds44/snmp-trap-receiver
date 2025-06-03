@@ -1,42 +1,96 @@
-version: '3'
+version: '3.8'
 
 services:
   postgres:
-    image: postgres:13
+    image: postgres:15-alpine
+    container_name: snmp-postgres
     environment:
-      POSTGRES_DB: snmptraps
-      POSTGRES_USER: trapuser
-      POSTGRES_PASSWORD: trappassword
+      POSTGRES_DB: ${POSTGRES_DB:-snmptraps}
+      POSTGRES_USER: ${POSTGRES_USER:-snmpuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-snmppass}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     ports:
       - "5432:5432"
+    networks:
+      - snmp-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-snmpuser} -d ${POSTGRES_DB:-snmptraps}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   snmptrapd:
-    build: ./snmptrapd
+    build:
+      context: ./snmptrapd
+    container_name: snmp-trapd
     ports:
       - "162:162/udp"
-    depends_on:
-      - postgres
+    volumes:
+      - ./logs:/var/log/snmp:rw
+      - ./mibs:/custom-mibs:ro
     environment:
-      POSTGRES_HOST: postgres
-      POSTGRES_DB: snmptraps
-      POSTGRES_USER: trapuser
-      POSTGRES_PASSWORD: trappassword
-      SNMP_AUTH_USER: trapuser
-      SNMP_AUTH_PASSWORD: authpass123
-      SNMP_PRIV_PASSWORD: privpass123
-      SNMP_AUTH_PROTOCOL: SHA
-      SNMP_PRIV_PROTOCOL: AES
+      - SNMP_USER=${SNMP_USER:-snmpv3user}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
+    networks:
+      - snmp-network
+    depends_on:
+      - trap-processor
+    healthcheck:
+      test: ["CMD", "pgrep", "snmptrapd"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-  trap-generator:
-    image: python:3.9-slim
+  trap-processor:
+    build:
+      context: ./trap-processor
+    container_name: snmp-processor
+    volumes:
+      - ./logs:/app/logs:rw
+      - ./mibs:/custom-mibs:ro
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=${POSTGRES_DB:-snmptraps}
+      - DB_USER=${POSTGRES_USER:-snmpuser}
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-snmppass}
+      - LOG_LEVEL=${LOG_LEVEL:-DEBUG}
+    networks:
+      - snmp-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import psycopg2; psycopg2.connect(host='postgres', database='${POSTGRES_DB:-snmptraps}', user='${POSTGRES_USER:-snmpuser}', password='${POSTGRES_PASSWORD:-snmppass}')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  trap-sender:
+    build:
+      context: ./trap-sender
+    container_name: snmp-sender
+    volumes:
+      - ./mibs:/custom-mibs:ro
+    environment:
+      - SNMP_USER=${SNMP_USER:-snmpv3user}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
+      - TRAPD_HOST=snmptrapd
+    networks:
+      - snmp-network
     depends_on:
       - snmptrapd
-    volumes:
-      - ./test:/test
-    command: ["tail", "-f", "/dev/null"] # Keeps container running
+    profiles:
+      - testing
 
 volumes:
   postgres_data:
+
+networks:
+  snmp-network:
+    driver: bridge
+
