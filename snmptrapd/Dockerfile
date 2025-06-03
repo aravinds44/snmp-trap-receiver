@@ -1,18 +1,11 @@
 FROM alpine:3.18
 
 # Install net-snmp and dependencies
-RUN apk add --no-cache \
-    net-snmp \
-    net-snmp-tools \
-    bash \
-    curl \
-    && rm -rf /var/cache/apk/*
+RUN apk update && apk add net-snmp net-snmp-tools bash
 
-# Create snmp user and directories
-RUN addgroup -g 1001 snmp && \
-    adduser -D -u 1001 -G snmp snmp && \
-    mkdir -p /var/lib/snmp /var/log/snmp /etc/snmp && \
-    chown -R snmp:snmp /var/lib/snmp /var/log/snmp /etc/snmp
+RUN mkdir -p /var/log/snmp /etc/snmp && touch /var/log/snmp/traps.log && \
+    chmod 777 /var/log/snmp /var/log/snmp/traps.log
+
 
 # Copy configuration and scripts
 COPY snmptrapd.conf /etc/snmp/snmptrapd.conf
@@ -20,13 +13,6 @@ COPY trap_handler.sh /usr/local/bin/trap_handler.sh
 
 # Make scripts executable
 RUN chmod +x /usr/local/bin/trap_handler.sh
-
-# Create log file
-RUN touch /var/log/snmp/snmptrapd.log && \
-    chown snmp:snmp /var/log/snmp/snmptrapd.log
-
-# Switch to snmp user
-USER snmp
 
 # Expose SNMP trap port
 EXPOSE 162/udp

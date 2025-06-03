@@ -13,9 +13,9 @@ send_trap() {
     local trap_oid=$1
     local description=$2
     local extra_varbinds=$3
-    
+
     echo "Sending $description trap to $TRAPD_HOST..."
-    
+
     snmptrap -v3 \
         -u "$SNMP_USER" \
         -l authPriv \
@@ -28,7 +28,7 @@ send_trap() {
         "$trap_oid" \
         1.3.6.1.2.1.1.3.0 t 12345 \
         $extra_varbinds
-        
+
     if [ $? -eq 0 ]; then
         echo "Successfully sent $description trap"
     else
@@ -56,8 +56,8 @@ send_coldstart_trap() {
 
 # Function to send custom enterprise trap
 send_custom_trap() {
-    send_trap "1.3.6.1.4.1.12345.1.1" "Custom Enterprise Trap" \
-        "1.3.6.1.4.1.12345.1.2.1 s \"Custom alert message\" 1.3.6.1.4.1.12345.1.2.2 i 75"
+    send_trap "1.3.6.1.4.1.12345.2.1" "Custom Enterprise Trap" \
+        "1.3.6.1.4.1.12345.1.1.1 s \"Custom alert message\" 1.3.6.1.4.1.12345.1.1.2 i 75"
 }
 
 # Function to send authentication failure trap
@@ -120,7 +120,3 @@ case "${1:-linkdown}" in
         exit 1
         ;;
 esac
-
-## MIB Files
-
-### mibs/SNMPv2-MIB.txt

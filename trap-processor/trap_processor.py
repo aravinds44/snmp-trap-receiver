@@ -267,5 +267,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# TODO Fix shared log path issue between trap-processor and snmptrapd
