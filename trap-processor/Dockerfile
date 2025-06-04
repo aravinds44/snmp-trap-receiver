@@ -29,5 +29,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD python -c "import psycopg2; psycopg2.connect(host='${DB_HOST}', database='${DB_NAME}', user='${DB_USER}', password='${DB_PASSWORD}')" || exit 1
 
 # Start the trap processor
-#CMD ["python", "trap_processor.py"]
-CMD ["tail", "-f", "/dev/null"]
+CMD ["python", "trap_processor.py"]
+#CMD ["tail", "-f", "/dev/null"]
