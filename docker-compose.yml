@@ -8,6 +8,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-snmptraps}
       POSTGRES_USER: ${POSTGRES_USER:-snmpuser}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-snmppass}
+      POSTGRES_HOST_AUTH_METHOD: "scram-sha-256"
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro

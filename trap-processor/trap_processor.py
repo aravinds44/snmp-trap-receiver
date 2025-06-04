@@ -81,93 +81,38 @@ class TrapProcessor:
         except Exception as e:
             self.logger.error(f"Failed to initialize MIBs: {e}")
 
-    def resolve_oid(self, oid: str) -> Tuple[str, str]:
-        """
-        Resolve OID to human-readable name.
-        Returns tuple of (resolved_name, description)
-        """
+    def parse_trap_entry(self, json_data: Dict) -> Optional[Dict]:
+        """Parse a JSON-formatted trap entry into our standard format."""
         try:
-            # Try to resolve using easysnmp
-            session = Session(hostname='localhost', community='public', version=2)
+            trap_data = {
+                'timestamp': json_data.get('timestamp', datetime.now().isoformat()),
+                'hostname': json_data.get('trap', {}).get('host', 'unknown'),
+                'source_ip': json_data.get('trap', {}).get('source_ip', 'unknown'),
+                'trap_oid': json_data.get('trap', {}).get('oid', ''),
+                'trap_name': json_data.get('trap', {}).get('name', ''),
+                'severity': json_data.get('trap', {}).get('severity', 'info'),
+                'uptime': json_data.get('trap', {}).get('uptime', ''),
+                'transport': json_data.get('trap', {}).get('transport', ''),
+                'raw_data': json.dumps(json_data)
+            }
 
-            # Remove leading dot if present
-            clean_oid = oid.lstrip('.')
+            # Process variable bindings
+            variable_bindings = []
+            for vb in json_data.get('varbinds', []):
+                variable_bindings.append({
+                    'oid': vb.get('oid', ''),
+                    'value': vb.get('value', ''),
+                    'resolved_name': vb.get('oid', ''),  # Already resolved in the input
+                    'description': ''  # Could be enhanced with MIB lookup
+                })
 
-            # Try to get symbolic name
-            try:
-                # This is a simplified approach - in production you might want
-                # to use more sophisticated MIB parsing
-                if clean_oid.startswith('1.3.6.1.2.1.1.3.0'):
-                    return ('sysUpTime.0', 'System uptime')
-                elif clean_oid.startswith('1.3.6.1.6.3.1.1.4.1.0'):
-                    return ('snmpTrapOID.0', 'SNMP trap OID')
-                elif clean_oid.startswith('1.3.6.1.2.1.2.2.1.1'):
-                    return ('ifIndex', 'Interface index')
-                elif clean_oid.startswith('1.3.6.1.2.1.2.2.1.2'):
-                    return ('ifDescr', 'Interface description')
-                elif clean_oid.startswith('1.3.6.1.2.1.2.2.1.8'):
-                    return ('ifOperStatus', 'Interface operational status')
-                else:
-                    # Try to map common enterprise OIDs
-                    return self.resolve_enterprise_oid(clean_oid)
+            trap_data['variable_bindings'] = variable_bindings
 
-            except Exception as e:
-                self.logger.debug(f"Could not resolve OID {oid}: {e}")
-                return (oid, 'Unknown OID')
+            return trap_data
 
         except Exception as e:
-            self.logger.warning(f"Error resolving OID {oid}: {e}")
-            return (oid, 'Resolution failed')
-
-    def resolve_enterprise_oid(self, oid: str) -> Tuple[str, str]:
-        """Resolve enterprise-specific OIDs."""
-        enterprise_mappings = {
-            '1.3.6.1.4.1.9': 'cisco',
-            '1.3.6.1.4.1.2021': 'net-snmp',
-            '1.3.6.1.4.1.8072': 'net-snmp-agent',
-            '1.3.6.1.4.1.2636': 'juniper',
-            '1.3.6.1.4.1.11': 'hp',
-        }
-
-        for prefix, vendor in enterprise_mappings.items():
-            if oid.startswith(prefix):
-                return (f"{vendor}.{oid[len(prefix)+1:]}", f"{vendor} enterprise OID")
-
-        return (oid, 'Enterprise OID')
-
-    def parse_trap_entry(self, lines: List[str]) -> Optional[Dict]:
-        """Parse a single trap entry from log lines."""
-        trap_data = {}
-        variable_bindings = []
-
-        for line in lines:
-            line = line.strip()
-            if line.startswith('TRAP_START:'):
-                trap_data['timestamp'] = line.split(':', 1)[1]
-            elif line.startswith('HOST:'):
-                trap_data['hostname'] = line.split(':', 1)[1]
-            elif line.startswith('IP:'):
-                trap_data['source_ip'] = line.split(':', 1)[1]
-            elif line.startswith('OID:'):
-                current_oid = line.split(':', 1)[1]
-            elif line.startswith('VALUE:'):
-                current_value = line.split(':', 1)[1]
-                if 'current_oid' in locals():
-                    resolved_name, description = self.resolve_oid(current_oid)
-                    variable_bindings.append({
-                        'oid': current_oid,
-                        'resolved_name': resolved_name,
-                        'value': current_value,
-                        'description': description
-                    })
-
-        if variable_bindings:
-            trap_data['variable_bindings'] = variable_bindings
-            # Set trap OID from the first binding (usually snmpTrapOID)
-            trap_data['trap_oid'] = variable_bindings[0]['oid']
-            trap_data['trap_name'] = variable_bindings[0]['resolved_name']
-
-        return trap_data if trap_data else None
+            self.logger.error(f"Error parsing trap entry: {e}")
+            return None
 
     def store_trap(self, trap_data: Dict):
         """Store trap data in PostgreSQL database."""
@@ -176,10 +121,10 @@ class TrapProcessor:
                 query = text("""
                     INSERT INTO snmp_traps (
                         timestamp, hostname, source_ip, trap_oid, trap_name,
-                        variable_bindings, raw_data
+                        severity, uptime, transport, variable_bindings, raw_data
                     ) VALUES (
                         :timestamp, :hostname, :source_ip, :trap_oid, :trap_name,
-                        :variable_bindings, :raw_data
+                        :severity, :uptime, :transport, :variable_bindings, :raw_data
                     )
                 """)
 
@@ -189,8 +134,11 @@ class TrapProcessor:
                     'source_ip': trap_data.get('source_ip', 'unknown'),
                     'trap_oid': trap_data.get('trap_oid', ''),
                     'trap_name': trap_data.get('trap_name', ''),
+                    'severity': trap_data.get('severity', 'info'),
+                    'uptime': trap_data.get('uptime', ''),
+                    'transport': trap_data.get('transport', ''),
                     'variable_bindings': json.dumps(trap_data.get('variable_bindings', [])),
-                    'raw_data': json.dumps(trap_data)
+                    'raw_data': trap_data.get('raw_data', '{}')
                 })
                 conn.commit()
 
@@ -217,16 +165,42 @@ class TrapProcessor:
                 self.last_position = f.tell()
 
             if content.strip():
-                # Split into individual trap entries
-                entries = content.split('---\n')
+                # Split content into individual JSON objects (each starting with { and ending with })
+                entries = []
+                buffer = ""
+                in_json = False
+                brace_count = 0
+
+                for char in content:
+                    if char == '{':
+                        if not in_json:
+                            in_json = True
+                            buffer = char
+                        else:
+                            buffer += char
+                        brace_count += 1
+                    elif char == '}':
+                        if in_json:
+                            buffer += char
+                            brace_count -= 1
+                            if brace_count == 0:
+                                try:
+                                    entries.append(json.loads(buffer))
+                                    buffer = ""
+                                    in_json = False
+                                except json.JSONDecodeError as e:
+                                    self.logger.error(f"Error decoding JSON: {e}")
+                                    buffer = ""
+                                    in_json = False
+                                    brace_count = 0
+                    elif in_json:
+                        buffer += char
 
                 for entry in entries:
-                    if entry.strip():
-                        lines = entry.strip().split('\n')
-                        if len(lines) > 1:  # Valid trap entry
-                            trap_data = self.parse_trap_entry(lines)
-                            if trap_data:
-                                self.store_trap(trap_data)
+                    if isinstance(entry, dict):
+                        trap_data = self.parse_trap_entry(entry)
+                        if trap_data:
+                            self.store_trap(trap_data)
 
         except Exception as e:
             self.logger.error(f"Error processing trap log: {e}")

@@ -22,4 +22,6 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD pgrep snmptrapd || exit 1
 
 # Start snmptrapd
-CMD ["snmptrapd", "-f", "-Lo", "-c", "/etc/snmp/snmptrapd.conf"]
+CMD ["snmptrapd", "-f", "-Lo"]
+
+#TODO: Change app user to non-root
