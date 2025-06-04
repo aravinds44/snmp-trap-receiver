@@ -52,14 +52,13 @@ services:
     container_name: snmp-processor
     volumes:
       - ./logs:/app/logs:rw
-      - ./mibs:/custom-mibs:ro
     environment:
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_NAME=${POSTGRES_DB:-snmptraps}
       - DB_USER=${POSTGRES_USER:-snmpuser}
       - DB_PASSWORD=${POSTGRES_PASSWORD:-snmppass}
-      - LOG_LEVEL=${LOG_LEVEL:-DEBUG}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
     networks:
       - snmp-network
     depends_on:

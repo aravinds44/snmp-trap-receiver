@@ -1,8 +1,4 @@
 psycopg2-binary==2.9.7
-pysnmp==4.4.12
-pysnmp-mibs==0.1.6
-pysmi==0.3.4
 sqlalchemy==2.0.21
 python-decouple==3.8
 watchdog==3.0.0
-easysnmp==0.2.5

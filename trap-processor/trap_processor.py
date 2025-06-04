@@ -15,8 +15,6 @@ from watchdog.events import FileSystemEventHandler
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from sqlalchemy import create_engine, text
-from easysnmp import Session
-from easysnmp.exceptions import EasySNMPError
 
 from config import Config
 
@@ -25,7 +23,6 @@ class TrapProcessor:
         self.config = Config()
         self.setup_logging()
         self.setup_database()
-        self.setup_mibs()
 
     def setup_logging(self):
         """Configure logging for the application."""
@@ -49,37 +46,6 @@ class TrapProcessor:
         except Exception as e:
             self.logger.error(f"Failed to connect to database: {e}")
             sys.exit(1)
-
-    def setup_mibs(self):
-        """Initialize MIB loading."""
-        self.mib_cache = {}
-        self.load_mibs()
-
-    def load_mibs(self):
-        """Load MIB files for OID resolution."""
-        try:
-            # Add custom MIB path to environment
-            if not os.path.exists(self.config.MIB_PATH):
-                self.logger.error(f"MIB path does not exist: {self.config.MIB_PATH}")
-                sys.exit(1)
-            else:
-                self.logger.info(f"MIB path exists at {self.config.MIB_PATH}")
-
-            os.environ['MIBS'] = f"+{self.config.MIB_PATH}"
-            os.environ['MIBDIRS'] = f"+{self.config.MIB_PATH}"
-
-            self.logger.info(f"Loading MIBs from {self.config.MIB_PATH}")
-
-            # Load standard MIBs
-            for mib in self.config.MIB_SOURCES:
-                try:
-                    self.mib_cache[mib] = True
-                    self.logger.debug(f"Loaded MIB: {mib}")
-                except Exception as e:
-                    self.logger.warning(f"Could not load MIB {mib}: {e}")
-
-        except Exception as e:
-            self.logger.error(f"Failed to initialize MIBs: {e}")
 
     def parse_trap_entry(self, json_data: Dict) -> Optional[Dict]:
         """Parse a JSON-formatted trap entry into our standard format."""
@@ -117,6 +83,20 @@ class TrapProcessor:
     def store_trap(self, trap_data: Dict):
         """Store trap data in PostgreSQL database."""
         try:
+            # Handle timestamp parsing with timezone support
+            timestamp_str = trap_data.get('timestamp', datetime.now().isoformat())
+
+            # Remove 'Z' if present and convert to datetime
+            if timestamp_str.endswith('Z'):
+                timestamp_str = timestamp_str[:-1] + '+00:00'
+
+            try:
+                timestamp = datetime.fromisoformat(timestamp_str)
+            except ValueError:
+                # Fallback to current time if parsing fails
+                timestamp = datetime.now()
+                self.logger.warning(f"Failed to parse timestamp {timestamp_str}, using current time")
+
             with self.engine.connect() as conn:
                 query = text("""
                     INSERT INTO snmp_traps (
@@ -129,7 +109,7 @@ class TrapProcessor:
                 """)
 
                 conn.execute(query, {
-                    'timestamp': datetime.fromisoformat(trap_data.get('timestamp', datetime.now().isoformat())),
+                    'timestamp': timestamp,
                     'hostname': trap_data.get('hostname', 'unknown'),
                     'source_ip': trap_data.get('source_ip', 'unknown'),
                     'trap_oid': trap_data.get('trap_oid', ''),

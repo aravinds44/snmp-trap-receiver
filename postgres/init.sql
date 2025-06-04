@@ -17,6 +17,8 @@ CREATE TABLE IF NOT EXISTS snmp_traps (
     variable_bindings JSONB,
     raw_data JSONB,
     severity VARCHAR(50) DEFAULT 'info',
+    uptime VARCHAR(50),  -- Added for new JSON format
+    transport VARCHAR(255),  -- Added for new JSON format
     acknowledged BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -29,6 +31,8 @@ CREATE INDEX IF NOT EXISTS idx_snmp_traps_trap_oid ON snmp_traps(trap_oid);
 CREATE INDEX IF NOT EXISTS idx_snmp_traps_trap_name ON snmp_traps(trap_name);
 CREATE INDEX IF NOT EXISTS idx_snmp_traps_severity ON snmp_traps(severity);
 CREATE INDEX IF NOT EXISTS idx_snmp_traps_acknowledged ON snmp_traps(acknowledged);
+CREATE INDEX IF NOT EXISTS idx_snmp_traps_uptime ON snmp_traps(uptime);
+CREATE INDEX IF NOT EXISTS idx_snmp_traps_transport ON snmp_traps(transport);
 
 -- Create GIN index for JSONB columns for better JSON query performance
 CREATE INDEX IF NOT EXISTS idx_snmp_traps_variable_bindings_gin ON snmp_traps USING GIN(variable_bindings);
@@ -41,11 +45,13 @@ CREATE TABLE IF NOT EXISTS snmp_trap_stats (
                                                trap_oid VARCHAR(255) NOT NULL,
     trap_name VARCHAR(255),
     source_ip INET NOT NULL,
+    severity VARCHAR(50),
     count INTEGER DEFAULT 1,
     first_seen TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     last_seen TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(date, trap_oid, source_ip)
     );
+
 
 -- Create index for trap statistics
 CREATE INDEX IF NOT EXISTS idx_snmp_trap_stats_date ON snmp_trap_stats(date);
@@ -56,13 +62,14 @@ CREATE INDEX IF NOT EXISTS idx_snmp_trap_stats_source_ip ON snmp_trap_stats(sour
 CREATE OR REPLACE FUNCTION update_trap_stats()
 RETURNS TRIGGER AS $$
 BEGIN
-INSERT INTO snmp_trap_stats (date, trap_oid, trap_name, source_ip, count, first_seen, last_seen)
-VALUES (CURRENT_DATE, NEW.trap_oid, NEW.trap_name, NEW.source_ip, 1, NEW.timestamp, NEW.timestamp)
+INSERT INTO snmp_trap_stats (date, trap_oid, trap_name, source_ip, severity, count, first_seen, last_seen)
+VALUES (CURRENT_DATE, NEW.trap_oid, NEW.trap_name, NEW.source_ip, NEW.severity, 1, NEW.timestamp, NEW.timestamp)
     ON CONFLICT (date, trap_oid, source_ip)
     DO UPDATE SET
                count = snmp_trap_stats.count + 1,
                last_seen = NEW.timestamp,
-               trap_name = COALESCE(NEW.trap_name, snmp_trap_stats.trap_name);
+               trap_name = COALESCE(NEW.trap_name, snmp_trap_stats.trap_name),
+               severity = COALESCE(NEW.severity, snmp_trap_stats.severity);
 
 RETURN NEW;
 END;
@@ -116,6 +123,8 @@ SELECT
     trap_oid,
     variable_bindings->0->>'value' AS first_binding_value,
     severity,
+    uptime,
+    transport,
     acknowledged
 FROM snmp_traps
 WHERE timestamp >= NOW() - INTERVAL '24 hours'
@@ -125,12 +134,13 @@ CREATE OR REPLACE VIEW trap_summary AS
 SELECT
     trap_name,
     trap_oid,
+    severity,
     COUNT(*) as total_count,
     COUNT(DISTINCT source_ip) as unique_sources,
     MAX(timestamp) as last_seen,
     MIN(timestamp) as first_seen
 FROM snmp_traps
-GROUP BY trap_name, trap_oid
+GROUP BY trap_name, trap_oid, severity
 ORDER BY total_count DESC;
 
 -- Set up table partitioning for better performance with large datasets

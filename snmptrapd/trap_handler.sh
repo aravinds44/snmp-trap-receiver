@@ -67,7 +67,7 @@ get_trap_severity() {
 # Main processing function
 process_trap() {
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-    local iso_timestamp=$(date -u '+%Y-%m-%dT%H:%M:%S.%3NZ')
+    local iso_timestamp=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
 
     # Initialize variables
     local host=""
