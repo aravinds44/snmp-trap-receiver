@@ -1,0 +1,120 @@
+{
+  "timestamp": "2025-06-05T10:41:15Z",
+  "level": "INFO",
+  "message": "SNMP trap received",
+  "trap": {
+    "host": "localhost",
+    "source_ip": "127.0.0.1",
+    "transport": "UDP: [127.0.0.1]:40486->[127.0.0.1]:162",
+    "oid": "EAGLEXGDSR-MIB::eagleXgDsrDbReplicationFaultNotify",
+    "name": "eagleXgDsrDbReplicationFaultNotify",
+    "severity": "critical",
+    "uptime": "1:2:27:53.53",
+    "varbind_count": 6
+  },
+  "varbinds": [{"oid":"DISMAN-EVENT-MIB::sysUpTimeInstance","value":"1:2:27:53.53"},{"oid":"SNMPv2-MIB::snmpTrapOID.0","value":"EAGLEXGDSR-MIB::eagleXgDsrDbReplicationFaultNotify"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmSrcNode","value":"c0a801/01"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmNumber","value":"31100"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmSeverity","value":"critical"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmText","value":"The HA manager (cmha) is impaired by a s/w fault"}],
+  "metadata": {
+    "handler_version": "2.0",
+    "processed_lines": 8
+  }
+}
+{
+  "timestamp": "2025-06-05T10:43:00Z",
+  "level": "INFO",
+  "message": "SNMP trap received",
+  "trap": {
+    "host": "localhost",
+    "source_ip": "127.0.0.1",
+    "transport": "UDP: [127.0.0.1]:37176->[127.0.0.1]:162",
+    "oid": "EAGLEXGDSR-MIB::eagleXgDsrDbReplicationFaultNotify",
+    "name": "eagleXgDsrDbReplicationFaultNotify",
+    "severity": "major",
+    "uptime": "1:2:29:38.38",
+    "varbind_count": 6
+  },
+  "varbinds": [{"oid":"DISMAN-EVENT-MIB::sysUpTimeInstance","value":"1:2:29:38.38"},{"oid":"SNMPv2-MIB::snmpTrapOID.0","value":"EAGLEXGDSR-MIB::eagleXgDsrDbReplicationFaultNotify"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmSrcNode","value":"c0a801/01"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmNumber","value":"31100"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmSeverity","value":"major"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmText","value":"The HA manager (cmha) is impaired by a s/w fault"}],
+  "metadata": {
+    "handler_version": "2.0",
+    "processed_lines": 8
+  }
+}
+{
+  "timestamp": "2025-06-05T10:58:18Z",
+  "level": "INFO",
+  "message": "SNMP trap received",
+  "trap": {
+    "host": "localhost",
+    "source_ip": "127.0.0.1",
+    "transport": "UDP: [127.0.0.1]:51331->[127.0.0.1]:162",
+    "oid": "EAGLEXGDSR-MIB::eagleXgDsrDbReplicationFaultNotify",
+    "name": "eagleXgDsrDbReplicationFaultNotify",
+    "severity": "major",
+    "uptime": "1:2:44:56.45",
+    "varbind_count": 6
+  },
+  "varbinds": [{"oid":"DISMAN-EVENT-MIB::sysUpTimeInstance","value":"1:2:44:56.45"},{"oid":"SNMPv2-MIB::snmpTrapOID.0","value":"EAGLEXGDSR-MIB::eagleXgDsrDbReplicationFaultNotify"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmSrcNode","value":"c0a801/01"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmNumber","value":"31100"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmSeverity","value":"major"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmText","value":"The HA manager (cmha) is impaired by a s/w fault"}],
+  "metadata": {
+    "handler_version": "2.0",
+    "processed_lines": 8
+  }
+}
+{
+  "timestamp": "2025-06-05T11:00:13Z",
+  "level": "INFO",
+  "message": "SNMP trap received",
+  "trap": {
+    "host": "localhost",
+    "source_ip": "127.0.0.1",
+    "transport": "UDP: [127.0.0.1]:48430->[127.0.0.1]:162",
+    "oid": "EAGLEXGDSR-MIB::eagleXgDsrDbReplicationFaultNotify",
+    "name": "eagleXgDsrDbReplicationFaultNotify",
+    "severity": "major",
+    "uptime": "1:2:46:51.67",
+    "varbind_count": 6
+  },
+  "varbinds": [{"oid":"DISMAN-EVENT-MIB::sysUpTimeInstance","value":"1:2:46:51.67"},{"oid":"SNMPv2-MIB::snmpTrapOID.0","value":"EAGLEXGDSR-MIB::eagleXgDsrDbReplicationFaultNotify"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmSrcNode","value":"c0a801/01"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmNumber","value":"31100"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmSeverity","value":"major"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmText","value":"The HA manager (cmha) is impaired by a s/w fault"}],
+  "metadata": {
+    "handler_version": "2.0",
+    "processed_lines": 8
+  }
+}
+{
+  "timestamp": "2025-06-05T16:56:15Z",
+  "level": "INFO",
+  "message": "SNMP trap received",
+  "trap": {
+    "host": "localhost",
+    "source_ip": "127.0.0.1",
+    "transport": "UDP: [127.0.0.1]:39503->[127.0.0.1]:162",
+    "oid": "EAGLEXGDSR-MIB::eagleXgDsrDbReplicationFaultNotify",
+    "name": "eagleXgDsrDbReplicationFaultNotify",
+    "severity": "critical",
+    "uptime": "1:8:41:43.65",
+    "varbind_count": 6
+  },
+  "varbinds": [{"oid":"DISMAN-EVENT-MIB::sysUpTimeInstance","value":"1:8:41:43.65"},{"oid":"SNMPv2-MIB::snmpTrapOID.0","value":"EAGLEXGDSR-MIB::eagleXgDsrDbReplicationFaultNotify"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmSrcNode","value":"c0a801/01"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmNumber","value":"31100"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmSeverity","value":"critical"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmText","value":"The HA manager (cmha) is impaired by a s/w fault"}],
+  "metadata": {
+    "handler_version": "2.0",
+    "processed_lines": 8
+  }
+}
+{
+  "timestamp": "2025-06-05T17:05:51Z",
+  "level": "INFO",
+  "message": "SNMP trap received",
+  "trap": {
+    "host": "localhost",
+    "source_ip": "127.0.0.1",
+    "transport": "UDP: [127.0.0.1]:56677->[127.0.0.1]:162",
+    "oid": "EAGLEXGDSR-MIB::eagleXgDsrDbReplicationFaultNotify",
+    "name": "eagleXgDsrDbReplicationFaultNotify",
+    "severity": "critical",
+    "uptime": "1:8:51:19.70",
+    "varbind_count": 6
+  },
+  "varbinds": [{"oid":"DISMAN-EVENT-MIB::sysUpTimeInstance","value":"1:8:51:19.70"},{"oid":"SNMPv2-MIB::snmpTrapOID.0","value":"EAGLEXGDSR-MIB::eagleXgDsrDbReplicationFaultNotify"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmSrcNode","value":"c0a801/01"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmNumber","value":"31100"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmSeverity","value":"critical"},{"oid":"EAGLEXGDSR-MIB::eagleXgDsrAlarmText","value":"The HA manager (cmha) is impaired by a s/w fault"}],
+  "metadata": {
+    "handler_version": "2.0",
+    "processed_lines": 8
+  }
+}

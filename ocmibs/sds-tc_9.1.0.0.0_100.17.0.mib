@@ -1,0 +1,174 @@
+--
+-- Copyright (C) 2006, 2014, Oracle and/or its affiliates. All rights reserved.
+-- $Id$
+--
+SDS-TC DEFINITIONS ::= BEGIN
+
+IMPORTS
+    TEXTUAL-CONVENTION FROM SNMPv2-TC;
+
+--
+-- Textual Conventions
+--
+SdsNodeId ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT    "3x/1x"
+    STATUS          current
+    DESCRIPTION
+            "Node ID of the SDS server."
+    SYNTAX  OCTET STRING (SIZE (4))
+
+SdsNodeCap ::= TEXTUAL-CONVENTION
+    STATUS      deprecated
+    DESCRIPTION
+            "NodeCapability"
+    SYNTAX  INTEGER {
+                masterCapable(0),
+                none(1)
+            }
+
+SdsNodeCapability ::= TEXTUAL-CONVENTION
+    STATUS      current
+    DESCRIPTION
+            "HA capability of the node"
+    SYNTAX  INTEGER {
+                oos(0),
+                observer(1),
+                spare(2),
+                standby(3),
+                active(4)
+            }
+
+SdsAlarmSeverity ::= TEXTUAL-CONVENTION
+    STATUS      current
+    DESCRIPTION
+            "Alarm severity values"
+    SYNTAX  INTEGER {
+                critical(1),
+                major(2),
+                minor(3),
+                info(4),
+                clear(5)
+            }
+
+SdsAlarmNumber ::= TEXTUAL-CONVENTION
+    STATUS      current
+    DESCRIPTION
+            "Alarm number values"
+    SYNTAX  INTEGER (0..2147483647)
+
+SdsDateAndTime ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT    "2d-1d-1d,1d:1d:1d.2d"
+    STATUS          current
+    DESCRIPTION
+            "Millisecond resolution date and time type"
+    SYNTAX      OCTET STRING (SIZE (7 | 9))
+
+SdsTaskName ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT    "16a"
+    STATUS          current
+    DESCRIPTION
+            "Process name"
+    SYNTAX      OCTET STRING (SIZE (0..16))
+
+SdsMergePartNum ::= TEXTUAL-CONVENTION
+    STATUS          current
+    DESCRIPTION
+            "Part number for merge tables"
+    SYNTAX      INTEGER {
+                    local(0),
+                    merged(1),
+                    localOnly(2)
+                }
+
+SdsAlarmGroup ::= TEXTUAL-CONVENTION
+    STATUS          current
+    DESCRIPTION
+            "Group an alarm belongs to"
+    SYNTAX      OCTET STRING (SIZE (0..4))
+
+SdsTelemetryName ::= TEXTUAL-CONVENTION
+    STATUS          current
+    DESCRIPTION
+            "Telemetry ID number"
+    SYNTAX      OCTET STRING (SIZE (0..25))
+
+SdsTelemetryType ::= TEXTUAL-CONVENTION
+    STATUS          current
+    DESCRIPTION
+            "Telemetry type"
+    SYNTAX      INTEGER {
+                    basic(0),
+                    rate(1),
+                    percent(2)
+                }
+
+SdsTelemetrySource ::= TEXTUAL-CONVENTION
+    STATUS          current
+    DESCRIPTION
+            "Telemetry source type"
+    SYNTAX      INTEGER {
+                    local(0),
+                    groupAverage(1),
+                    procCpu(2),
+                    procCpuUser(3),
+                    procCpuSys(4),
+                    procMemRes(5),
+                    procMemHeap(6),
+                    procMemTotal(7),
+                    loadAvg1(8),
+                    loadAvg5(9),
+                    loadAvg15(10),
+                    memTotal(11),
+                    memFree(12),
+                    swapTotal(13),
+                    swapFree(14),
+                    sysCpu(15),
+                    shMemTotal(16),
+                    shMemFree(17),
+                    sysUpTime(18),
+                    diskTotal(19),
+                    diskFree(20),
+                    procNCpu(21),
+                    procNCpuUser(22),
+                    procNCpuSys(23),
+                    sysCpuCore(24),
+                    swapIn(25),
+                    swapOut(26),
+                    localAppl(27)
+                }
+
+SdsTelemetryBasis ::= TEXTUAL-CONVENTION
+    STATUS          current
+    DESCRIPTION
+            "Telemetry source type"
+    SYNTAX      INTEGER {
+                    currentValue(0),
+                    runningAvg(1)
+                }
+
+SdsTelemetryId ::= TEXTUAL-CONVENTION
+    STATUS			current
+    DESCRIPTION
+            "Telemetry ID number"
+    SYNTAX		INTEGER (0..32767)
+
+
+SdsEventType ::= TEXTUAL-CONVENTION
+    STATUS          current
+    DESCRIPTION
+            "Event type"
+    SYNTAX      INTEGER {
+                    none(0),
+                    communication(1),
+                    qualityOfService(2),
+                    processingError(3),
+                    equipment(4),
+                    environmental(5),
+                    integrityViolation(6),
+                    operationalViolation(7),
+                    physicalViolation(8),
+                    securityServiceOrMechanismViolation(9),
+                    timeDomainViolation(10)
+                }
+
+END

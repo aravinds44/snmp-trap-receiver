@@ -1,0 +1,451 @@
+2025-06-05 04:24:44,769 - __main__ - INFO - Trap processor initialized
+2025-06-05 04:24:44,805 - __main__ - INFO - Database connection established
+2025-06-05 04:24:44,809 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 04:24:44,811 - __main__ - WARNING - Trap log file not found: /app/logs/traps.log
+2025-06-05 04:24:54,827 - __main__ - WARNING - Trap log file not found: /app/logs/traps.log
+2025-06-05 04:25:04,842 - __main__ - WARNING - Trap log file not found: /app/logs/traps.log
+2025-06-05 04:25:14,859 - __main__ - WARNING - Trap log file not found: /app/logs/traps.log
+2025-06-05 04:25:24,873 - __main__ - WARNING - Trap log file not found: /app/logs/traps.log
+2025-06-05 04:25:34,887 - __main__ - WARNING - Trap log file not found: /app/logs/traps.log
+2025-06-05 04:25:36,867 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 04:38:59,663 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 04:40:18,292 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 04:41:08,485 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 04:45:45,107 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 04:58:56,603 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 04:59:08,272 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 04:59:48,099 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 05:42:05,818 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 06:16:04,422 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 06:16:16,632 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 06:19:16,475 - __main__ - INFO - Stored trap from 172.29.0.5 - linkDown
+2025-06-05 07:24:59,456 - __main__ - INFO - Trap processor initialized
+2025-06-05 07:24:59,489 - __main__ - INFO - Database connection established
+2025-06-05 07:24:59,501 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 07:24:59,544 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 07:24:59,548 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 07:24:59,557 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 07:24:59,568 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:24:59,574 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:24:59,586 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:24:59,590 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:24:59,594 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:24:59,596 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:24:59,600 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:24:59,603 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:24:59,606 - __main__ - INFO - Stored trap from 172.29.0.5 - linkDown
+2025-06-05 07:39:33,747 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:40:23,953 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:46:12,435 - __main__ - INFO - Stored trap from 172.31.0.6 - linkDown
+2025-06-05 07:56:13,169 - __main__ - INFO - Trap processor initialized
+2025-06-05 07:56:13,436 - __main__ - INFO - Database connection established
+2025-06-05 07:56:13,666 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 07:56:13,854 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 07:56:13,867 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 07:56:13,874 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 07:56:13,878 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:56:13,885 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:56:13,902 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:56:13,913 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:56:13,938 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:56:13,955 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:56:14,522 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:56:14,696 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:56:15,069 - __main__ - INFO - Stored trap from 172.29.0.5 - linkDown
+2025-06-05 07:56:15,166 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:56:15,367 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 07:56:15,635 - __main__ - INFO - Stored trap from 172.31.0.6 - linkDown
+2025-06-05 08:03:38,050 - __main__ - INFO - Trap processor initialized
+2025-06-05 08:03:38,318 - __main__ - INFO - Database connection established
+2025-06-05 08:03:38,371 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 08:03:38,796 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:03:38,904 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:03:38,985 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:03:39,038 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:03:39,088 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:03:39,133 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:03:39,162 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:03:39,185 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:03:39,213 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:03:39,237 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:03:39,319 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:03:39,408 - __main__ - INFO - Stored trap from 172.29.0.5 - linkDown
+2025-06-05 08:03:39,448 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:03:39,515 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:03:39,532 - __main__ - INFO - Stored trap from 172.31.0.6 - linkDown
+2025-06-05 08:04:09,064 - __main__ - INFO - Stored trap from 192.168.0.6 - linkDown
+2025-06-05 08:07:36,005 - __main__ - INFO - Trap processor initialized
+2025-06-05 08:07:36,147 - __main__ - INFO - Database connection established
+2025-06-05 08:07:36,170 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 08:07:36,300 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:07:36,326 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:07:36,330 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:07:36,333 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:07:36,336 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:07:36,342 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:07:36,346 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:07:36,349 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:07:36,353 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:07:36,359 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:07:36,382 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:07:36,389 - __main__ - INFO - Stored trap from 172.29.0.5 - linkDown
+2025-06-05 08:07:36,394 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:07:36,400 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:07:36,419 - __main__ - INFO - Stored trap from 172.31.0.6 - linkDown
+2025-06-05 08:07:36,437 - __main__ - INFO - Stored trap from 192.168.0.6 - linkDown
+2025-06-05 08:11:20,455 - __main__ - INFO - Trap processor initialized
+2025-06-05 08:11:20,543 - __main__ - INFO - Database connection established
+2025-06-05 08:11:20,590 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 08:11:21,683 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:11:21,705 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:11:21,724 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:11:21,781 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:11:21,862 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:11:21,877 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:11:21,894 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:11:21,921 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:11:22,057 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:11:22,250 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:11:22,317 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:11:22,404 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:11:22,440 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:11:22,453 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:11:22,463 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:11:22,492 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:13:03,289 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.16.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:39,892 - __main__ - INFO - Trap processor initialized
+2025-06-05 08:15:40,038 - __main__ - INFO - Database connection established
+2025-06-05 08:15:40,042 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 08:15:40,072 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:40,091 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:40,103 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:40,127 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:40,205 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:40,268 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:40,377 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:40,428 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:40,593 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:40,693 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:40,744 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:40,799 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:40,836 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:40,883 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:40,901 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:41,062 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:15:41,101 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:16:43,964 - __main__ - ERROR - Failed to store trap: (psycopg2.OperationalError) connection to server at "postgres" (192.168.32.2), port 5432 failed: FATAL:  password authentication failed for user "snmpuser"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-05 08:19:03,911 - __main__ - INFO - Trap processor initialized
+2025-06-05 08:19:04,146 - __main__ - INFO - Database connection established
+2025-06-05 08:19:04,177 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 08:19:04,502 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:19:04,519 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:19:04,557 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:19:04,832 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:19:04,931 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:19:04,957 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:19:04,979 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:19:04,990 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:19:05,058 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:19:05,077 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:19:05,123 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:19:05,154 - __main__ - INFO - Stored trap from 172.29.0.5 - linkDown
+2025-06-05 08:19:05,187 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:19:05,206 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:19:05,220 - __main__ - INFO - Stored trap from 172.31.0.6 - linkDown
+2025-06-05 08:19:05,230 - __main__ - INFO - Stored trap from 192.168.0.6 - linkDown
+2025-06-05 08:19:05,259 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:19:05,270 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:22:09,719 - __main__ - INFO - Trap processor initialized
+2025-06-05 08:22:10,004 - __main__ - INFO - Database connection established
+2025-06-05 08:22:10,011 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 08:22:10,184 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:22:10,191 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:22:10,200 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:22:10,205 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:22:10,209 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:22:10,213 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:22:10,217 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:22:10,222 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:22:10,228 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:22:10,233 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:22:10,288 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:22:10,349 - __main__ - INFO - Stored trap from 172.29.0.5 - linkDown
+2025-06-05 08:22:10,425 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:22:10,437 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:22:10,444 - __main__ - INFO - Stored trap from 172.31.0.6 - linkDown
+2025-06-05 08:22:10,449 - __main__ - INFO - Stored trap from 192.168.0.6 - linkDown
+2025-06-05 08:22:10,522 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:22:10,553 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:27:56,229 - __main__ - INFO - Trap processor initialized
+2025-06-05 08:27:56,257 - __main__ - INFO - Database connection established
+2025-06-05 08:27:56,260 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 08:27:56,291 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:27:56,294 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:27:56,296 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:27:56,298 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:27:56,299 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:27:56,301 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:27:56,303 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:27:56,304 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:27:56,305 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:27:56,307 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:27:56,309 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:27:56,311 - __main__ - INFO - Stored trap from 172.29.0.5 - linkDown
+2025-06-05 08:27:56,313 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:27:56,315 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:27:56,316 - __main__ - INFO - Stored trap from 172.31.0.6 - linkDown
+2025-06-05 08:27:56,318 - __main__ - INFO - Stored trap from 192.168.0.6 - linkDown
+2025-06-05 08:27:56,319 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:27:56,321 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:51:52,390 - __main__ - INFO - Trap processor initialized
+2025-06-05 08:51:52,737 - __main__ - INFO - Database connection established
+2025-06-05 08:51:53,201 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 08:51:53,359 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:51:53,390 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:51:53,395 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 08:51:53,400 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:51:53,404 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:51:53,409 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:51:53,413 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:51:53,417 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:51:53,433 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:51:53,442 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:51:53,484 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:51:53,518 - __main__ - INFO - Stored trap from 172.29.0.5 - linkDown
+2025-06-05 08:51:53,545 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:51:53,559 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:51:53,576 - __main__ - INFO - Stored trap from 172.31.0.6 - linkDown
+2025-06-05 08:51:53,601 - __main__ - INFO - Stored trap from 192.168.0.6 - linkDown
+2025-06-05 08:51:53,722 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 08:51:54,206 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:07:25,108 - __main__ - INFO - Trap processor initialized
+2025-06-05 09:07:25,126 - __main__ - INFO - Database connection established
+2025-06-05 09:07:25,127 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 09:07:25,142 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 09:07:25,143 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 09:07:25,145 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 09:07:25,146 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:07:25,146 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:07:25,147 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:07:25,148 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:07:25,150 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:07:25,152 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:07:25,153 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:07:25,154 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:07:25,154 - __main__ - INFO - Stored trap from 172.29.0.5 - linkDown
+2025-06-05 09:07:25,155 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:07:25,156 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:07:25,157 - __main__ - INFO - Stored trap from 172.31.0.6 - linkDown
+2025-06-05 09:07:25,158 - __main__ - INFO - Stored trap from 192.168.0.6 - linkDown
+2025-06-05 09:07:25,159 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:07:25,160 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:21:47,330 - __main__ - INFO - Trap processor initialized
+2025-06-05 09:21:47,356 - __main__ - INFO - Database connection established
+2025-06-05 09:21:47,357 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 09:21:47,374 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 09:21:47,376 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 09:21:47,377 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 09:21:47,379 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:21:47,380 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:21:47,381 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:21:47,382 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:21:47,384 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:21:47,385 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:21:47,387 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:21:47,388 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:21:47,389 - __main__ - INFO - Stored trap from 172.29.0.5 - linkDown
+2025-06-05 09:21:47,390 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:21:47,391 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:21:47,392 - __main__ - INFO - Stored trap from 172.31.0.6 - linkDown
+2025-06-05 09:21:47,394 - __main__ - INFO - Stored trap from 192.168.0.6 - linkDown
+2025-06-05 09:21:47,395 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:21:47,397 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:27:55,059 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:44:38,534 - __main__ - INFO - Trap processor initialized
+2025-06-05 09:44:38,553 - __main__ - INFO - Database connection established
+2025-06-05 09:44:38,555 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 09:44:38,604 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 09:44:38,607 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 09:44:38,611 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 09:44:38,613 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:44:38,617 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:44:38,622 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:44:38,625 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:44:38,628 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:44:38,631 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:44:38,633 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:44:38,636 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:44:38,638 - __main__ - INFO - Stored trap from 172.29.0.5 - linkDown
+2025-06-05 09:44:38,640 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:44:38,643 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:44:38,645 - __main__ - INFO - Stored trap from 172.31.0.6 - linkDown
+2025-06-05 09:44:38,648 - __main__ - INFO - Stored trap from 192.168.0.6 - linkDown
+2025-06-05 09:44:38,650 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:44:38,653 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:44:38,654 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:48:30,017 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:51:03,590 - __main__ - INFO - Trap processor initialized
+2025-06-05 09:51:03,610 - __main__ - INFO - Database connection established
+2025-06-05 09:51:03,611 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 09:51:03,645 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 09:51:03,647 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 09:51:03,648 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 09:51:03,650 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:51:03,651 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:51:03,653 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:51:03,656 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:51:03,659 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:51:03,661 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:51:03,664 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:51:03,665 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:51:03,667 - __main__ - INFO - Stored trap from 172.29.0.5 - linkDown
+2025-06-05 09:51:03,669 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:51:03,670 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:51:03,672 - __main__ - INFO - Stored trap from 172.31.0.6 - linkDown
+2025-06-05 09:51:03,674 - __main__ - INFO - Stored trap from 192.168.0.6 - linkDown
+2025-06-05 09:51:03,677 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:51:03,682 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:51:03,684 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:51:03,686 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:51:20,340 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:57:00,437 - __main__ - INFO - Trap processor initialized
+2025-06-05 09:57:00,459 - __main__ - INFO - Database connection established
+2025-06-05 09:57:00,461 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 09:57:00,501 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 09:57:00,504 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 09:57:00,507 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 09:57:00,510 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:57:00,513 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:57:00,515 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:57:00,518 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:57:00,520 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:57:00,524 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:57:00,526 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:57:00,528 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:57:00,529 - __main__ - INFO - Stored trap from 172.29.0.5 - linkDown
+2025-06-05 09:57:00,531 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:57:00,533 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:57:00,535 - __main__ - INFO - Stored trap from 172.31.0.6 - linkDown
+2025-06-05 09:57:00,536 - __main__ - INFO - Stored trap from 192.168.0.6 - linkDown
+2025-06-05 09:57:00,541 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:57:00,544 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:57:00,545 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:57:00,547 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:57:00,548 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 09:57:09,207 - __main__ - ERROR - Error decoding JSON: Invalid control character at: line 11 column 42 (char 378)
+2025-06-05 10:00:01,362 - __main__ - INFO - Trap processor initialized
+2025-06-05 10:00:01,396 - __main__ - INFO - Database connection established
+2025-06-05 10:00:01,398 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 10:00:01,404 - __main__ - ERROR - Error decoding JSON: Invalid control character at: line 11 column 42 (char 378)
+2025-06-05 10:00:01,427 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 10:00:01,429 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 10:00:01,430 - __main__ - INFO - Stored trap from 127.0.0.1 - dcaCustomNotification90Notify
+2025-06-05 10:00:01,432 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:00:01,433 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:00:01,435 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:00:01,436 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:00:01,437 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:00:01,439 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:00:01,440 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:00:01,442 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:00:01,443 - __main__ - INFO - Stored trap from 172.29.0.5 - linkDown
+2025-06-05 10:00:01,444 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:00:01,445 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:00:01,446 - __main__ - INFO - Stored trap from 172.31.0.6 - linkDown
+2025-06-05 10:00:01,447 - __main__ - INFO - Stored trap from 192.168.0.6 - linkDown
+2025-06-05 10:00:01,448 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:00:01,449 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:00:01,450 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:00:01,450 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:00:01,451 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:00:16,495 - __main__ - ERROR - Error decoding JSON: Invalid control character at: line 11 column 42 (char 378)
+2025-06-05 10:39:12,606 - __main__ - INFO - Trap processor initialized
+2025-06-05 10:39:12,623 - __main__ - INFO - Database connection established
+2025-06-05 10:39:12,625 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 10:39:47,243 - __main__ - ERROR - Error decoding JSON: Invalid control character at: line 11 column 38 (char 374)
+2025-06-05 10:41:00,240 - __main__ - INFO - Trap processor initialized
+2025-06-05 10:41:00,261 - __main__ - INFO - Database connection established
+2025-06-05 10:41:00,263 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 10:41:15,814 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:43:00,642 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 10:58:18,720 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 11:00:13,936 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 16:53:46,538 - __main__ - INFO - Trap processor initialized
+2025-06-05 16:53:46,556 - __main__ - INFO - Database connection established
+2025-06-05 16:53:46,558 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-05 16:53:46,575 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 16:53:46,577 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 16:53:46,580 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 16:53:46,582 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 16:56:15,356 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-05 17:05:51,410 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify

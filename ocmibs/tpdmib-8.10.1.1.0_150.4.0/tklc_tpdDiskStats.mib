@@ -1,0 +1,228 @@
+-- *****************************************************************************
+-- Copyright (C) 2003, 2016, Oracle and/or its affiliates. All rights reserved.
+-- *****************************************************************************
+TEKELEC-TPD-DISK-STATS-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    Counter32,
+    MODULE-IDENTITY,
+    OBJECT-TYPE,
+    Unsigned32 FROM SNMPv2-SMI
+    DisplayString FROM SNMPv2-TC
+    tekelecTPD FROM TEKELEC-TOPLEVEL-REG;
+    
+--   SNMPv2-SMI  from RFC1902
+
+tpdDisks    MODULE-IDENTITY
+    LAST-UPDATED "201412170000Z"
+    ORGANIZATION "Tekelec, Inc."
+    CONTACT-INFO "
+         Postal: Tekelec, Inc.
+                 5200 Paramount Parkway
+                 Morrisville, NC 27560
+                 USA
+
+        Website: http://www.tekelec.com/support/
+
+          Email: support@tekelec.com
+
+            Tel:
+    US & Canada: 888.367.8552
+          India: +91.124.436.8552
+          China: +65.6248.4510
+    UK & Europe: +44.1784.467.804"
+
+    DESCRIPTION
+        "This MIB is for the Tekelec TPD Disk Stats
+         Copyright (C) Tekelec, Inc."
+
+-- --------------------------------------------------------------------------
+--                             REVISION HISTORY
+--  
+--  There should be one REVISION/DESCRIPTION pair for each revision of the
+--  file.  Revisions should appear in reverse chronological order (the newest
+--  revision at the top).
+-- --------------------------------------------------------------------------
+    REVISION "201412170000Z"
+    DESCRIPTION
+        "Updated Oracle copyright for 2015."
+
+    REVISION "201405070000Z"
+    DESCRIPTION
+        "Update copyright information"
+
+    REVISION "201209190000Z"
+    DESCRIPTION
+        "PR 216289: MIB compilation fixes"
+
+    REVISION "201209050000Z"
+    DESCRIPTION
+        "PR 219068: Fixing objects description"
+
+    REVISION "201207110000Z"
+    DESCRIPTION
+        "Enhancing as per FE007019"
+
+    ::= { tekelecTPD 4 }
+
+tpdDiskStats OBJECT IDENTIFIER ::= { tpdDisks 1 }
+
+tpdDiskStatsSequenceNumber OBJECT-TYPE
+    SYNTAX	Counter32
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION
+        "The sequence number that will be sent with next disk status notification."
+    ::= { tpdDiskStats 1 }
+
+tpdDiskTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF TPDDiskEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "A list of disk stats table entries.  The table contains zero, one or
+        many rows at any moment, depending upon the number of disks available."
+    ::= { tpdDiskStats 2 }
+
+tpdTimeInterval OBJECT-TYPE
+    SYNTAX	Unsigned32
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION
+        "Time interval"
+    ::= { tpdDiskStats 3}
+
+tpdDiskEntry OBJECT-TYPE
+    SYNTAX      TPDDiskEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    	"Disk stats entry."
+    INDEX       { curIndex }
+    ::= { tpdDiskTable 1 }
+
+TPDDiskEntry ::= SEQUENCE {
+    curIndex	Counter32,
+    dName	DisplayString,
+    dMajor	Unsigned32,
+    dMinor	Unsigned32,
+    dReads	Unsigned32,
+    rMerge	Unsigned32,
+    rSec	Unsigned32,
+    rUse	Unsigned32,
+    dWrites	Unsigned32,
+    wMerge	Unsigned32,
+    wSec	Unsigned32,
+    wUse	Unsigned32,
+    ioRunning	Unsigned32,
+    ioUse	Unsigned32,
+    ioAveq	Unsigned32         
+    }
+
+curIndex OBJECT-TYPE
+    SYNTAX	Counter32
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION
+        "The current diskTable index."
+    ::= { tpdDiskEntry 1 }
+
+dName OBJECT-TYPE
+    SYNTAX DisplayString
+    MAX-ACCESS read-only
+    STATUS      current
+    DESCRIPTION "Disk Name"
+    ::= { tpdDiskEntry 2 }
+
+dMajor OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Disk Major number"
+    ::= { tpdDiskEntry 3 }
+
+dMinor OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Disk Minor number"
+    ::= { tpdDiskEntry 4 }
+
+dReads OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Number of reads issued"
+    ::= { tpdDiskEntry 5 }
+
+rMerge OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Number of reads merged"
+    ::= { tpdDiskEntry 6 }
+
+rSec OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Number of sectors read"
+    ::= { tpdDiskEntry 7 }
+
+rUse OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Number of milliseconds spent reading"
+    ::= { tpdDiskEntry 8 }
+
+dWrites OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Number of writes completed"
+    ::= { tpdDiskEntry 9 }
+
+wMerge OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Number of writes merged"
+    ::= { tpdDiskEntry 10 }
+
+wSec OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Number of sectors written"
+    ::= { tpdDiskEntry 11 }
+
+wUse OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Number of milliseconds spent writing"
+    ::= { tpdDiskEntry 12 }
+
+ioRunning OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Number of I/Os currently in progress"
+    ::= { tpdDiskEntry 13 } 
+
+ioUse OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Number of milliseconds spent doing I/Os"
+    ::= { tpdDiskEntry 14 }
+
+ioAveq OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Weighted number of milliseconds spent doing I/Os"
+    ::= { tpdDiskEntry 15 }
+
+END

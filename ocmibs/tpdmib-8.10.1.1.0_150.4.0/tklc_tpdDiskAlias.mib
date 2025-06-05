@@ -1,0 +1,117 @@
+-- *****************************************************************************
+-- Copyright (C) 2003, 2016, Oracle and/or its affiliates. All rights reserved.
+-- *****************************************************************************
+TEKELEC-TPD-DISK-ALIAS-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY,
+    OBJECT-TYPE,
+    Counter32     FROM SNMPv2-SMI
+    DisplayString FROM SNMPv2-TC
+    tekelecTPD    FROM TEKELEC-TOPLEVEL-REG;
+
+--   SNMPv2-SMI  from RFC1902
+
+tpdDiskAliases    MODULE-IDENTITY
+    LAST-UPDATED "201412170000Z"
+    ORGANIZATION "Tekelec, Inc."
+    CONTACT-INFO "
+         Postal: Tekelec, Inc.
+                 5200 Paramount Parkway
+                 Morrisville, NC 27560
+                 USA
+
+        Website: http://www.tekelec.com/support/
+
+          Email: support@tekelec.com
+
+            Tel:
+    US & Canada: 888.367.8552
+          India: +91.124.436.8552
+          China: +65.6248.4510
+    UK & Europe: +44.1784.467.804"
+
+    DESCRIPTION
+        "This MIB is for the Tekelec TPD Disk Kernel Name Mapping to Device Path
+         Copyright (C) Tekelec, Inc."
+
+-- --------------------------------------------------------------------------
+--                             REVISION HISTORY
+--  
+--  There should be one REVISION/DESCRIPTION pair for each revision of the
+--  file.  Revisions should appear in reverse chronological order (the newest
+--  revision at the top).
+-- --------------------------------------------------------------------------
+    REVISION "201412170000Z"
+    DESCRIPTION
+        "Updated Oracle copyright for 2015."
+
+    REVISION "201405070000Z"
+    DESCRIPTION
+        "Update copyright information"
+
+    REVISION "201209190000Z"
+    DESCRIPTION
+        "PR 216289: MIB compilation fixes"
+
+    REVISION "201209050000Z"
+    DESCRIPTION
+        "PR 219068: Fixing objects description"
+
+    REVISION "201207110000Z"
+    DESCRIPTION
+        "Enhancing as per FE007019"
+
+    ::= { tekelecTPD 5 }
+
+tpdDiskAliasData OBJECT IDENTIFIER ::= { tpdDiskAliases 1 }
+
+tpdDiskAliasTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF TPDDiskAliasEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "A list of disk names entries.  The table contains zero, one or many
+        rows at any moment, depending upon the number of disk partitions available."
+    ::= { tpdDiskAliasData 1 }
+
+tpdDiskAliasEntry OBJECT-TYPE
+    SYNTAX      TPDDiskAliasEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+    	"The disk name entry."
+    INDEX       { curIndex }
+    ::= { tpdDiskAliasTable 1 }
+
+TPDDiskAliasEntry ::= SEQUENCE {
+    curIndex	Counter32,
+    kernelName	DisplayString,
+    devicePath	DisplayString
+    }
+
+curIndex OBJECT-TYPE
+    SYNTAX	Counter32
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION
+        "The current diskTable index."
+    ::= { tpdDiskAliasEntry 1 }
+
+kernelName OBJECT-TYPE
+    SYNTAX	DisplayString
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION
+    	"Disk Kernel Name"
+    ::= { tpdDiskAliasEntry 2 }
+
+devicePath OBJECT-TYPE
+    SYNTAX	DisplayString
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION
+    	"Disk Device Path"
+    ::= { tpdDiskAliasEntry 3 }
+
+END

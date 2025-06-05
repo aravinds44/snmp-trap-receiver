@@ -1,0 +1,333 @@
+-- *****************************************************************************
+-- Copyright (C) 2003, 2016, Oracle and/or its affiliates. All rights reserved.
+-- *****************************************************************************
+TEKELEC-TPD-COMMON-OBJECTS-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    enterprises,
+    OBJECT-TYPE,
+    MODULE-IDENTITY,
+    OBJECT-IDENTITY,
+    Integer32,
+    Gauge32,
+    NOTIFICATION-TYPE FROM SNMPv2-SMI
+    NOTIFICATION-GROUP,
+    OBJECT-GROUP FROM SNMPv2-CONF
+    DisplayString,
+    TEXTUAL-CONVENTION,
+    DateAndTime FROM SNMPv2-TC
+    tekelecTPD FROM TEKELEC-TOPLEVEL-REG;
+
+--   SNMPv2-SMI  from RFC1902
+
+tpdCommonObjects   MODULE-IDENTITY
+    LAST-UPDATED "201412170000Z"
+    ORGANIZATION "Tekelec, Inc."
+    CONTACT-INFO "
+         Postal: Tekelec, Inc.
+                 5200 Paramount Parkway
+                 Morrisville, NC 27560
+                 USA
+
+        Website: http://www.tekelec.com/support/
+
+          Email: support@tekelec.com
+
+            Tel:
+    US & Canada: 888.367.8552
+          India: +91.124.436.8552
+          China: +65.6248.4510
+    UK & Europe: +44.1784.467.804"
+
+    DESCRIPTION
+        "This MIB is for the Tekelec TPD Alarm Objects"
+
+-- --------------------------------------------------------------------------
+--                             REVISION HISTORY
+--  
+--  There should be one REVISION/DESCRIPTION pair for each revision of the
+--  file.  Revisions should appear in reverse chronological order (the newest
+--  revision at the top).
+-- --------------------------------------------------------------------------
+    REVISION "201412170000Z"
+    DESCRIPTION
+        "Updated Oracle copyright for 2015."
+
+    REVISION "201410070000Z"
+    DESCRIPTION
+        "Add HIDS support"
+
+    REVISION "201404290000Z"
+    DESCRIPTION
+        "PR 233401: Add FIPS mode"
+
+    REVISION "201404040000Z"
+    DESCRIPTION
+        "Add Oracle Copyright"
+
+    REVISION "201311060000Z"
+    DESCRIPTION
+        "PR 231254: Add OEM hardware problem alarm"
+
+    REVISION "201209190000Z"
+    DESCRIPTION
+        "PR 216289: MIB compilation fixes"
+
+    REVISION "201209050000Z"
+    DESCRIPTION
+        "PR 219068: Fixing objects description"
+
+    REVISION "201207110000Z"
+    DESCRIPTION
+        "Enhancing as per FE007019"
+
+    REVISION "200808140000Z"
+    DESCRIPTION
+        "Added bind variable definition"
+
+    REVISION "200611101620Z"
+    DESCRIPTION
+        "Initial version"
+
+  ::= { tekelecTPD 2 }
+
+-- --------------------------------------------------------------------------
+--                              TEXTUAL CONVENTIONS
+-- --------------------------------------------------------------------------
+AlarmLocation ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "255a"
+    STATUS       current
+    DESCRIPTION  "The location of this alarm"
+    SYNTAX       OCTET STRING (SIZE (0..255))
+
+AlarmState ::= TEXTUAL-CONVENTION
+    STATUS       deprecated
+    DESCRIPTION  "The action that is being reported."
+    SYNTAX       INTEGER { undefined(0),
+	                   set(1),
+	                   clear(2),
+	                   info(3)
+	                 }
+
+AlarmId ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "255a"
+    STATUS       deprecated
+    DESCRIPTION  "The text ID for this alarm"
+    SYNTAX       OCTET STRING (SIZE (0..255))
+
+AlarmSeverity ::= TEXTUAL-CONVENTION
+    STATUS       current
+    DESCRIPTION  "The configured severity for this alarm"
+    SYNTAX       INTEGER { undefined(0),
+	                   critical(1),
+	                   major(2),
+	                   minor(3),
+	                   informational(4),
+                       clear(5)
+	                 }
+
+AlarmText ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "255a"
+    STATUS       current
+    DESCRIPTION  "Text description of this alarm"
+    SYNTAX       OCTET STRING (SIZE (0..255))
+
+AlarmNumber ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "255a"
+    STATUS       current
+    DESCRIPTION  "Alarm number for this alarm"
+    SYNTAX       OCTET STRING (SIZE (0..255))
+
+AlarmEventType ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "255a"
+    STATUS       current
+    DESCRIPTION  "Event type of this alarm"
+    SYNTAX       OCTET STRING (SIZE (0..255))
+
+AlarmProbableCause ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "255a"
+    STATUS       current
+    DESCRIPTION  "Probable cause of this alarm"
+    SYNTAX       OCTET STRING (SIZE (0..255))
+
+-- ----------------------------------------------------------
+--    Tekelec MIB Module Structure
+-- ----------------------------------------------------------
+tpdAlarmObjects OBJECT IDENTIFIER ::= { tpdCommonObjects 1 }
+
+trapSequenceNumber OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "This number is a trap counter."
+    ::= { tpdAlarmObjects 1 }
+
+alarmLocation OBJECT-TYPE
+    SYNTAX      AlarmLocation
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "This objects stated the location of the alarm computer."
+    ::= { tpdAlarmObjects 2 }
+
+alarmState OBJECT-TYPE
+    SYNTAX      AlarmState
+    MAX-ACCESS  read-only
+    STATUS      deprecated
+    DESCRIPTION
+            "This is the current state of the alarm, (SET|CLEAR|INFO)."
+    ::= { tpdAlarmObjects 3 }
+
+alarmId OBJECT-TYPE
+    SYNTAX      AlarmId
+    MAX-ACCESS  read-only
+    STATUS      deprecated
+    DESCRIPTION
+            "This objects states the alarm identifier."
+    ::= { tpdAlarmObjects 4 }
+
+alarmSeverity OBJECT-TYPE
+    SYNTAX      AlarmSeverity
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "This objects stated the severity of the alarm."
+    ::= { tpdAlarmObjects 5 }
+
+alarmText OBJECT-TYPE
+    SYNTAX      AlarmText
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "This objects provides the alarm description."
+    ::= { tpdAlarmObjects 6 }
+
+alarmTime OBJECT-TYPE
+    SYNTAX      DateAndTime
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "The time at which the alarm event occurred"
+    ::= { tpdAlarmObjects 7 }
+
+bindVarNamesValuesStr OBJECT-TYPE
+    SYNTAX	DisplayString
+    MAX-ACCESS	read-only
+    STATUS	deprecated
+    DESCRIPTION
+	    "Pipe delimited list of bind variable name/value pairs to be used as key along with alarm Id"
+    ::= { tpdAlarmObjects 8 }
+
+alarmNumber OBJECT-TYPE
+    SYNTAX      AlarmNumber
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "This objects provides the alarm number."
+    ::= { tpdAlarmObjects 9 }
+
+alarmEventType OBJECT-TYPE
+    SYNTAX      AlarmEventType
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "This objects provides the alarm event type."
+    ::= { tpdAlarmObjects 10 }
+
+alarmProbableCause OBJECT-TYPE
+    SYNTAX      AlarmProbableCause
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "This objects provides the alarm description."
+    ::= { tpdAlarmObjects 11 }
+
+alarmAdditionalInfoStr OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Pipe delimited list of bind variable name/value pairs to be used as key along with alarm Id"
+    ::= { tpdAlarmObjects 12 }
+
+-- ----------------------------------------------------------
+--    OEM Hardware Problem Information
+-- ----------------------------------------------------------
+oemHardwareObjects OBJECT IDENTIFIER ::= { tpdCommonObjects 2 }
+
+oemHardwareSubsystem OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Subsystem where hardware problem was detected"
+    ::= { oemHardwareObjects 1 }
+
+oemHardwareLocation OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Location where hardware problem was detected"
+    ::= { oemHardwareObjects 2 }
+
+oemHardwareDescription OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Description of hardware problem that was detected"
+    ::= { oemHardwareObjects 3 }
+
+-- ----------------------------------------------------------
+--    Generic Problem Information
+-- ----------------------------------------------------------
+genericDescriptionObjects OBJECT IDENTIFIER ::= { tpdCommonObjects 3 }
+
+genericDescriptionString OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Description string for a generic alarm"
+    ::= { genericDescriptionObjects 1 }
+
+-- ----------------------------------------------------------
+--    HIDS Problem Information
+-- ----------------------------------------------------------
+hidsObjects OBJECT IDENTIFIER ::= { tpdCommonObjects 4 }
+
+user OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "User who preformed a hids action"
+    ::= { hidsObjects 1 }
+
+previousBaselineSignatureMatch OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Flag if any alarms raised for potential file tampering"
+    ::= { hidsObjects 2 }
+
+modifiedFileName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Name of file which was modified"
+    ::= { hidsObjects 3 }
+
+modifiedFileLocation OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Location of the modified file"
+    ::= { hidsObjects 4 }
+
+END

@@ -1,0 +1,176 @@
+version: '3.8'
+
+services:
+  snmp-psql:
+    image: postgres:15.3-alpine
+    container_name: snmp-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - snmp-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  snmptrapd:
+    image: snmptrapd:1.0.0
+    container_name: snmp-trapd
+    ports:
+      - "162:162/udp"
+    volumes:
+      - ./logs:/var/log/snmp:rw
+      - ./mibs:/custom-mibs:ro
+    environment:
+      - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
+      - MIBS=+ALL
+      - SNMP_USER=${SNMP_USER}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS}
+    networks:
+      - snmp-network
+    depends_on:
+      snmp-psql:
+        condition: service_healthy
+      trap-processor:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "pgrep", "snmptrapd"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  trap-processor:
+    image: trap-processor:1.0.0
+    container_name: snmp-processor
+    volumes:
+      - ./logs:/app/logs:rw
+    environment:
+      - DB_HOST=snmp-psql
+      - DB_PORT=5432
+      - DB_NAME=${POSTGRES_DB}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - LOG_LEVEL=${LOG_LEVEL}
+    networks:
+      - snmp-network
+    depends_on:
+      snmp-psql:
+        condition: service_healthy
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  trap-sender:
+    image: trap-sender:1.0.0
+    container_name: snmp-sender
+    volumes:
+      - ./mibs:/custom-mibs:ro
+    environment:
+      - SNMP_USER=${SNMP_USER}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS}
+      - TRAPD_HOST=snmptrapd
+    networks:
+      - snmp-network
+    depends_on:
+      - snmptrapd
+    profiles:
+      - testing
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  grafana:
+    image: grafana/grafana:10.2.2
+    container_name: snmp-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - GF_INSTALL_PLUGINS=
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    networks:
+      - snmp-network
+    depends_on:
+      snmp-psql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  postgres_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+networks:
+  snmp-network:
+    driver: bridge

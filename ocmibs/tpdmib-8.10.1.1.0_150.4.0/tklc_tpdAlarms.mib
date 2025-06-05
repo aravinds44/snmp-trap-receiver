@@ -1,0 +1,2885 @@
+-- *****************************************************************************
+-- Copyright (C) 2003, 2016, Oracle and/or its affiliates. All rights reserved.
+-- *****************************************************************************
+TEKELEC-TPD-ALARMS-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY,
+    OBJECT-TYPE,
+    Counter32,
+    Gauge32,
+    NOTIFICATION-TYPE FROM SNMPv2-SMI
+	DisplayString,
+    DateAndTime FROM SNMPv2-TC
+	snmpTrapOID,
+    sysName FROM SNMPv2-MIB
+    AlarmLocation, alarmLocation,
+    AlarmId, alarmId,
+    AlarmNumber, alarmNumber,
+    AlarmSeverity, alarmSeverity,
+    AlarmText, alarmText,
+    alarmState, alarmTime,
+    AlarmEventType, alarmEventType,
+    AlarmProbableCause, alarmProbableCause,
+    bindVarNamesValuesStr,
+    alarmAdditionalInfoStr,
+    oemHardwareSubsystem, oemHardwareLocation, oemHardwareDescription,
+    trapSequenceNumber, 
+    genericDescriptionString,
+    user,
+    previousBaselineSignatureMatch,
+    modifiedFileName,
+    modifiedFileLocation FROM TEKELEC-TPD-COMMON-OBJECTS-MIB
+    tekelecTPD FROM TEKELEC-TOPLEVEL-REG
+    hrDeviceDescr,
+    hrDeviceErrors,
+    hrStorageDescr,
+    hrFSMountPoint,
+    hrSWRunName FROM HOST-RESOURCES-MIB
+    cpqDaCntlrSlot,
+    cpqDaLogDrvIndex,
+    cpqDaPhyDrvLocationString FROM CPQIDA-MIB
+    monCpuUtilization,
+    cpuUtilizationThreshold,
+    monRamBytesFree,
+    ramBytesFreeThreshold,
+    monPortCRCErr,
+    portsCRCErrThreshold,
+    monPortRunts,
+    portsRuntsThreshold,
+    monPortOverSize,
+    portsOverSizeThreshold FROM PRVT-SYS-MON-MIB
+    ifIndex FROM IF-MIB;
+
+--   SNMPv2-SMI  from RFC1902
+
+tpdAlarms    MODULE-IDENTITY
+    LAST-UPDATED "201510210000Z"
+    ORGANIZATION "Tekelec, Inc."
+    CONTACT-INFO "
+         Postal: Tekelec, Inc.
+                 5200 Paramount Parkway
+                 Morrisville, NC 27560
+                 USA
+
+        Website: http://www.tekelec.com/support/
+
+          Email: support@tekelec.com
+
+            Tel:
+    US & Canada: 888.367.8552
+          India: +91.124.436.8552
+          China: +65.6248.4510
+    UK & Europe: +44.1784.467.804"
+
+    DESCRIPTION
+        "This MIB is for the Tekelec TekServer Alarm
+         Copyright (C) 2003, 2016, Oracle and/or its affiliates. All rights reserved."
+
+-- --------------------------------------------------------------------------
+--                             REVISION HISTORY
+--  
+--  There should be one REVISION/DESCRIPTION pair for each revision of the
+--  file.  Revisions should appear in reverse chronological order (the newest
+--  revision at the top).
+-- --------------------------------------------------------------------------
+    REVISION "201510210000Z"
+    DESCRIPTION
+        "Added tpdCpuPowerLimitMismatch alarm"
+
+    REVISION "201506170000Z"
+    DESCRIPTION
+        "Added tpdServerPatchPendingAccept alarm"
+
+    REVISION "201505180000Z"
+    DESCRIPTION
+        "Merged E5appB support from 7.0.2"
+
+    REVISION "201503260000Z"
+    DESCRIPTION
+        "Added PDC alarm"
+
+    REVISION "201412170000Z"
+    DESCRIPTION
+        "Updated Oracle copyright for 2015."
+
+    REVISION "201412050000Z"
+    DESCRIPTION
+        "Updated description copyright."
+
+    REVISION "201411250000Z"
+    DESCRIPTION
+        " Added HIDS alarms"
+
+    REVISION "201411210000Z"
+    DESCRIPTION
+        " Orabug 20034854: Revert the name of the disk status alarm for backwards compatibility."
+
+    REVISION "201408280000Z"
+    DESCRIPTION
+        " Orabug 19490318: Update alarms in MIB for HP Gen9 support."
+
+    REVISION "201406130000Z"
+    DESCRIPTION
+        " PR 240816: Fix mib errors"
+
+    REVISION "201405070000Z"
+    DESCRIPTION
+        " PR 238715: Move alarnNumber, eventType, probableCause, alarmAdditionalInfoStr to end for backward compatibility"
+
+    REVISION "201404230000Z"
+    DESCRIPTION
+        "PR 233401: Add alarm for FIPS subsystem problems"
+
+    REVISION "201404040000Z"
+    DESCRIPTION
+        "Add Oracle Copyright"
+
+    REVISION "201311060000Z"
+    DESCRIPTION
+        "PR 231254: Add alarm for OEM hardware problems"
+
+    REVISION "201309110000Z"
+    DESCRIPTION
+        "PR 230814: add new alarms for LVM snapshost syscheck test"
+
+    REVISION "201306250000Z"
+    DESCRIPTION
+        "PR 223826, PR 228845: add alarms for LSI syscheck test"
+
+    REVISION "201305150000Z"
+    DESCRIPTION
+        "PR 227674: Add NTP alarms"
+
+    REVISION "201304290000Z"
+    DESCRIPTION
+        "PR 227167: Move event type and probable cause from bind vars"
+
+    REVISION "201210220000Z"
+    DESCRIPTION
+        "PR 219608: Added max pid alarms"
+
+    REVISION "201209190000Z"
+    DESCRIPTION
+        "PR 216289: MIB compilation fixes"
+
+    REVISION "201209050000Z"
+    DESCRIPTION
+        "PR 219068: Fixing objects description"
+
+    REVISION "201207160000Z"
+    DESCRIPTION
+        "Obsoleting TKSPLATCR1-13; TKSPLATMA3,7,10-12,20; TKSPLATMI4-5"
+
+    REVISION "201207110000Z"
+    DESCRIPTION
+        "Enhancing as per FE007019; Fix typo in tpdTelcoSwitchNotification object"
+
+    REVISION "201205030000Z"
+    DESCRIPTION
+        "Reserve Major Alarm 39 for E5-APP-B"
+
+    REVISION "201203060000Z"
+    DESCRIPTION
+        "Cleaned up merge issue from TPD 5.0"
+
+    REVISION "201201130000Z"
+    DESCRIPTION
+        "Added alarm for upgrade pending accept/reject"
+
+    REVISION "201006150000Z"
+    DESCRIPTION
+        "cleaned up dangling commas"
+
+    REVISION "201004190000Z"
+    DESCRIPTION
+        "Added kernel dump files alarm"
+
+    REVISION "201003310000Z"
+    DESCRIPTION
+        "Added TPD upgrade alarm"
+
+    REVISION "200911060000Z"
+    DESCRIPTION
+        "Added for Telco alarms"
+
+    REVISION "200808140000Z"
+    DESCRIPTION
+        "Added bind variables to alarm table and traps"
+
+    REVISION "200803140000Z"
+    DESCRIPTION
+        "Added DRBD alarms"
+
+    REVISION "200611101620Z"
+    DESCRIPTION
+        "Initial version"
+
+  ::= { tekelecTPD 3 }
+
+
+traps OBJECT IDENTIFIER ::= { tpdAlarms 1 }
+
+-- ------------------------------------------------
+--                 TRAPS/NOTIFICATIONS
+-- ------------------------------------------------
+
+failures OBJECT IDENTIFIER ::= { traps 1 }
+-- ------------------------------------------------
+-- ************************************************
+--                       CRITICAL
+-- ************************************************
+-- ------------------------------------------------
+tpdBrkPnlFeedUnavailable		NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Breaker panel feed unavailable'
+		 alarm is no longer raised."
+	::= { failures 1 }
+
+tpdBrkPnlBreakerFailure			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Breaker panel breaker failure'
+		 alarm is no longer raised."
+	::= { failures 2 }
+
+tpdBrkPnlMntFailure				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Breaker panel monitoring failure'
+		 alarm is no longer raised."
+	::= { failures 3 }
+
+tpdPowerFeedUnavail				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Power feed unavailable'
+		 alarm is no longer raised."
+	::= { failures 4 }
+
+tpdPowerSupply1Failure			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Power Supply 1 Failure'
+		 alarm is no longer raised."
+	::= { failures 5 }
+
+tpdPowerSupply2Failure			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Power Supply 2 Failure'
+		 alarm is no longer raised."
+	::= { failures 6 }
+
+tpdPowerSupply3Failure			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Power Supply 3 Failure'
+		 alarm is no longer raised."
+	::= { failures 7 }
+
+tpdRaidFeedUnavailable			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'RAID Feed Unavailable'
+		 alarm is no longer raised."
+	::= { failures 8 }
+
+tpdRaidPower1Failure			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'RAID Power Supply 1 Failure'
+		 alarm is no longer raised."
+	::= { failures 9 }
+
+tpdRaidPower2Failure			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'RAID Power Supply 2 Failure'
+		 alarm is no longer raised."
+	::= { failures 10 }
+
+tpdRaidPower3Failure			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'RAID Power Supply 3 Failure'
+		 alarm is no longer raised."
+	::= { failures 11 }
+
+tpdDeviceFailure				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		hrDeviceDescr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Device Failure'
+		 alarm is no longer raised."
+	::= { failures 12 }
+
+tpdDeviceIfFailure				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Device Interface Failure'
+		 alarm is no longer raised."
+	::= { failures 13 }
+
+tpdEccUncorrectableError			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Uncorrectable ECC Memory Error"
+	::= { failures 14 }
+
+tpdSNMPGetFailure			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		sysName,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"SNMP Get Failure"
+	::= { failures 15 }
+
+tpdChronyDaemonNotSynchronizedFailure			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Chrony Daemon Lost Synchronization For Extended Time"
+	::= { failures 16 }
+
+tpdNTPTimeGoneBackwards		NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server's Time Has Gone Backwards"
+	::= { failures 17 }
+
+ntpOffsetCheckFailure		NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"NTP Offset Check Failure"
+	::= { failures 18 }
+
+errors OBJECT IDENTIFIER ::= { traps 2 }
+-- ------------------------------------------------
+-- ************************************************
+--                       MAJOR
+-- ************************************************
+-- ------------------------------------------------
+tpdFanError					NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Fan Failure"
+	::= { errors 1 }
+
+tpdIntDiskError				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		hrStorageDescr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Internal Disk Failure"
+	::= { errors 2 }
+
+tpdRaidDiskError				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Server RAID Disk Error'
+		 alarm is no longer raised."
+	::= { errors 3 }
+
+tpdPlatformError				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Platform Error"
+	::= { errors 4 }
+
+tpdFileSystemError				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		hrFSMountPoint,
+		hrStorageDescr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server File System Error"
+	::= { errors 5 }
+
+tpdPlatProcessError				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		hrSWRunName,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Platform Process Error"
+	::= { errors 6 }
+
+tpdRamShortageError				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Server RAM Shortage Failure'
+		 alarm is no longer raised."
+	::= { errors 7 }
+
+tpdSwapSpaceShortageError			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Swap Space Shortage Failure"
+	::= { errors 8 }
+
+tpdProvNetworkError				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		sysName,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Provisioning Network Error"
+	::= { errors 9 }
+
+tpdEagleNetworkAError			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		sysName
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Server Eagle Network A Error'
+		 alarm is no longer raised."
+	::= { errors 10 }
+
+tpdEagleNetworkBError			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		sysName
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Server Eagle Network B Error'
+		 alarm is no longer raised."
+	::= { errors 11 }
+
+tpdSyncNetworkError				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		sysName
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Server Sync Network Error'
+		 alarm is no longer raised."
+	::= { errors 12 }
+
+tpdDiskSpaceShortageError			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		hrFSMountPoint,
+		hrStorageDescr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Disk Space Shortage Error"
+	::= { errors 13 }
+
+tpdDefaultRouteNetworkError			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Default Route Network Error"
+	::= { errors 14 }
+
+tpdServerTemperatureError			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Temperature Error"
+	::= { errors 15 }
+
+tpdServerMainboardVoltageError		NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Mainboard Voltage Failure"
+	::= { errors 16 }
+
+tpdPowerFeedError				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Power Feed Error"
+	::= { errors 17 }
+
+tpdDiskHealthError				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		hrStorageDescr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Disk Health Test Error"
+	::= { errors 18 }
+
+tpdDiskUnavailableError			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		hrStorageDescr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Disk Unavailable Error"
+	::= { errors 19 }
+
+tpdDeviceError				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		hrDeviceDescr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Device Error'
+		 alarm is no longer raised."
+	::= { errors 20 }
+
+tpdDeviceIfError				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		hrDeviceDescr,
+		hrDeviceErrors, 
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Device Interface Error"
+	::= { errors 21 }
+
+tpdEccCorrectableError			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Correctable ECC Memory Error"
+	::= { errors 22 }
+
+tpdPowerSupply1Error			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Power Supply A Error"
+	::= { errors 23 }
+
+tpdPowerSupply2Error			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Power Supply B Error"
+	::= { errors 24 }
+
+tpdBrkPnlFeedError				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Breaker Panel Feed Error"
+	::= { errors 25 }
+
+tpdBrkPnlBreakerError			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Breaker Panel Breaker Error"
+	::= { errors 26 }
+
+tpdBrkPnlMntError				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Breaker Panel Monitoring Error"
+	::= { errors 27 }
+
+tpdHaKeepaliveError				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server HA Keepalive Error"
+	::= { errors 28 }
+
+tpdDrbdUnavailable				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"DRBD is not available"
+	::= { errors 29 }
+
+tpdDrbdNotReplicating			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"DRBD is not replicating"
+	::= { errors 30 }
+
+tpdDrbdPeerProblem				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"DRBD peer problem"
+	::= { errors 31 }
+
+tpdHpDiskProblem				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		cpqDaCntlrSlot,
+		cpqDaLogDrvIndex,
+		cpqDaPhyDrvLocationString,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"HP disk problem"
+	::= { errors 32 }
+
+tpdHpDiskCtrlrProblem				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		cpqDaCntlrSlot,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"HP Smart Array controller problem"
+	::= { errors 33 }
+
+tpdHPACUCLIProblem				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"HP hpacucliStatus utility problem"
+	::= { errors 34 }
+
+tpdMpathDeviceProblem			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS current
+	DESCRIPTION
+		"Multipath device access link problem"
+	::= { errors 35 }
+
+tpdSwitchLinkDownError			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		sysName,
+		ifIndex,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS current
+	DESCRIPTION
+		"Switch Link Down Error"
+	::= { errors 36 }
+
+tpdHalfOpenSocketLimit			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS current
+	DESCRIPTION
+		"Half open socket limit"
+	::= { errors 37 }
+
+tpdFlashProgramFailure          NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr
+    }
+    STATUS current
+    DESCRIPTION
+        "Flash device failed to update"
+    ::= { errors 38 }
+
+tpdSerialMezzUnseated           NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr
+    }
+    STATUS current
+    DESCRIPTION
+        "Serial Mezzanine card is not seated properly"
+    ::= { errors 39 }
+
+tpdMaxPidLimit			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS current
+	DESCRIPTION
+		"Max pid threshold limit"
+	::= { errors 40 }
+
+tpdChronyDaemonNotSynchronizedError		NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS current
+	DESCRIPTION
+		"Server Chrony Daemon Lost Synchronization For Extended Time"
+	::= { errors 41 }
+
+tpdChronyDaemonNeverSynchronized		NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS current
+	DESCRIPTION
+		"Server Chrony Daemon Never Synchronized"
+	::= { errors 42 }
+
+ntpOffsetCheckError			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS current
+	DESCRIPTION
+		"NTP Offset Check Failure"
+	::= { errors 43 }
+
+tpdDiskProblem				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"RAID disk problem"
+	::= { errors 44 }
+
+tpdDiskCtrlrProblem				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"RAID controller problem"
+	::= { errors 45 }
+
+tpdUpgradeSnapshotInvalid		NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		hrStorageDescr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Upgrade snapshot(s) invalid"
+	::= { errors 46 }
+
+tpdOEMHardwareProblem             NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        oemHardwareDescription,
+        oemHardwareLocation,
+        oemHardwareSubsystem,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr
+    }
+    STATUS current
+    DESCRIPTION
+        "Problem detected by hardware management process"
+    ::= { errors 47 }
+
+tpdHWMGMTCLIProblem               NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr
+    }
+    STATUS current
+    DESCRIPTION
+        "Problem detected with the hardware management process"
+    ::= { errors 48 }
+
+tpdFipsSubsystemProblem           NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        genericDescriptionString,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr
+    }
+    STATUS current
+    DESCRIPTION
+        "The FIPS subsystem needs intervention"
+    ::= { errors 49 }
+
+tpdHidsFileTampering            NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr
+    }
+    STATUS current
+    DESCRIPTION
+        "HIDS file tampering detected"
+    ::= { errors 50 }
+
+tpdSecurityProcessDown             NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr,
+        genericDescriptionString
+    }
+    STATUS current
+    DESCRIPTION
+        "HIDS detected security process is down"
+    ::= { errors 51 }
+        
+warnings OBJECT IDENTIFIER ::= { traps 3 }
+-- ------------------------------------------------
+-- ************************************************
+--                       MINOR
+-- ************************************************
+-- ------------------------------------------------
+tpdDiskSpaceShortageWarning			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		hrFSMountPoint,
+		hrStorageDescr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Disk Space Shortage Warning"
+	::= { warnings 1 }
+
+tpdApplicationProcessError			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		hrSWRunName,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Application Process Error"
+	::= { warnings 2 }
+
+tpdHardwareConfigError			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Hardware Configuration Error"
+	::= { warnings 3 }
+
+tpdRamShortageWarning			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Server RAM Shortage Warning'
+		 alarm is no longer raised."
+	::= { warnings 4 }
+
+tpdSoftwareConfigError			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr
+	}
+	STATUS  obsolete
+	DESCRIPTION
+		"Notification is obsolete since the 'Server Software Configuration Error'
+		 alarm is no longer raised."
+	::= { warnings 5 }
+
+tpdSwapSpaceShortageWarning			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Swap Space Shortage Warning"
+	::= { warnings 6 }
+
+tpdDefaultRouteNotDefined			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Default Router Not Defined"
+	::= { warnings 7 }
+
+tpdServerTemperatureWarning			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Temperature Warning"
+	::= { warnings 8 }
+
+tpdServerCoreFileDetected			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Core File Detected"
+	::= { warnings 9 }
+
+tpdChronyDaemonNotSynchronizedWarning			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Chrony Daemon Not Synchronized"
+	::= { warnings 10 }
+
+tpdCMOSBatteryVoltageLow			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"CMOS Battery Voltage Low"
+	::= { warnings 11 }
+
+tpdSmartTestWarn				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		hrStorageDescr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Disk Self Test Warning"
+	::= { warnings 12 }
+
+tpdDeviceWarn				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		hrDeviceDescr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Device Warning"
+	::= { warnings 13 }
+
+tpdDeviceIfWarn				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		hrDeviceDescr,
+		hrDeviceErrors,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Device Interface Warning"
+	::= { warnings 14 }
+
+tpdWatchdogReboot				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Reboot Watchdog Initiated"
+	::= { warnings 15 }
+
+tpdHaInhibited				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server HA Failover Inhibited"
+	::= { warnings 16 }
+
+tpdHaActiveToStandbyTrans			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server HA Active To Standby Transition"
+	::= { warnings 17 }
+
+tpdHaStandbyToActiveTrans			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server HA Standby To Active Transition"
+	::= { warnings 18 }
+
+tpdHealthCheckFailed			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Platform Health Check Failure"
+	::= { warnings 19 }
+
+ntpOffsetCheckWarning			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"NTP Offset Check Failure"
+	::= { warnings 20 }
+
+ntpStratumCheckFailed			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"NTP Stratum Check Failure"
+	::= { warnings 21 }
+
+sasPresenceSensorMissing		NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"SAS Presence Sensor Missing"
+	::= { warnings 22 }
+
+sasDriveMissing					NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"SAS Drive Missing"
+	::= { warnings 23 }
+
+tpdDrbdFailoverBusy				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"DRBD failover busy"
+	::= { warnings 24 }
+
+tpdHpDiskResync				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		cpqDaCntlrSlot,
+		cpqDaLogDrvIndex,
+		cpqDaPhyDrvLocationString,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"HP disk resync"
+	::= { warnings 25 }
+
+tpdTelcoFanWarning				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		sysName,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Telco fan warning"
+	::= { warnings 26 }
+
+tpdTelcoTemperatureWarning				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		sysName,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Telco temperature warning"
+	::= { warnings 27 }
+
+tpdTelcoPowerSupplyWarning				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		sysName,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Telco power supply warning"
+	::= { warnings 28 }
+ 
+tpdInvalidBiosValue                    NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+    }
+    STATUS  current
+    DESCRIPTION
+        "Invalid BIOS value"
+    ::= { warnings 29 }
+
+tpdServerKernelDumpFileDetected			NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Kernel Dump File Detected"
+	::= { warnings 30 }
+
+tpdUpgradeFailed                       NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        genericDescriptionString,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+    }
+    STATUS  current
+    DESCRIPTION
+        "TPD Upgrade Failed"
+    ::= { warnings 31 }
+
+tpdHalfOpenSocketWarning          NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+    }
+    STATUS  current
+    DESCRIPTION
+        "Half Open TCP Sockets Warning"
+    ::= { warnings 32 }
+
+tpdServerUpgradePendingAccept          NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+    }
+    STATUS  current
+    DESCRIPTION
+        "TPD Upgrade Needs Accept/Reject"
+    ::= { warnings 33 }
+
+tpdMaxPidWarning          NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+    }
+    STATUS  current
+    DESCRIPTION
+        "Max pid threshold Warning"
+    ::= { warnings 34 }
+
+tpdNTPSourceIsBad          NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+    }
+    STATUS  current
+    DESCRIPTION
+        "NTP Source Server Is Not Able To Provide Correct Time"
+    ::= { warnings 35 }
+
+tpdDiskResync				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"RAID disk resync"
+	::= { warnings 36 }
+
+tpdUpgradeSnapshotWarning   NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		hrStorageDescr,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Server Upgrade snapshot(s) warning"
+	::= { warnings 37 }
+
+tpdFipsSubsystemWarning     NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        genericDescriptionString,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr
+		
+	}
+	STATUS  current
+	DESCRIPTION
+        "The FIPS subsystem needs intervention"
+	::= { warnings 38 }
+
+tpdPdcError                 NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr
+    }
+    STATUS  current
+    DESCRIPTION
+        "Platform Data Collection Error"
+    ::= { warnings 39 }
+
+tpdServerPatchPendingAccept          NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+    }
+    STATUS  current
+    DESCRIPTION
+        "TPD Patch Needs Accept/Reject"
+    ::= { warnings 40 }
+ 
+tpdCpuPowerLimitMismatch     NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+        genericDescriptionString,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+        "The BIOS setting for CPU Power Limit is different than expected"
+	::= { warnings 41 }
+
+informationals OBJECT IDENTIFIER ::= { traps 4 }
+-- ------------------------------------------------
+-- ************************************************
+--                   INFORMATIONALS
+-- ************************************************
+-- ------------------------------------------------
+tpdTelcoSwitchNotification				NOTIFICATION-TYPE
+	OBJECTS {
+		trapSequenceNumber,
+		alarmLocation,
+		alarmState,
+		alarmId,
+		alarmSeverity,
+		alarmText,
+		alarmTime,
+		bindVarNamesValuesStr,
+		sysName,
+		snmpTrapOID,
+		monPortCRCErr,
+		portsCRCErrThreshold,
+		monPortRunts,
+		portsRuntsThreshold,
+		monPortOverSize,
+		portsOverSizeThreshold,
+		monCpuUtilization,
+		cpuUtilizationThreshold,
+		monRamBytesFree,
+		ramBytesFreeThreshold,
+		alarmNumber,
+		alarmEventType,
+		alarmProbableCause,
+		alarmAdditionalInfoStr
+	}
+	STATUS  current
+	DESCRIPTION
+		"Telco Switch notification"
+	::= { informationals 1 }
+
+tpdHidsBaselineCreated              NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr,
+        user
+    }
+    STATUS  current
+    DESCRIPTION
+        "HIDS baseline created"
+    ::= { informationals 2 }
+
+tpdHidsBaselineDeleted              NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr,
+        user,
+        previousBaselineSignatureMatch
+    }
+    STATUS current
+    DESCRIPTION
+        "HIDS baseline deleted"
+    ::= { informationals 3 }
+
+tpdHidsEnabled                  NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr,
+        user
+    }
+    STATUS current
+    DESCRIPTION
+        "HIDS monitoring has been enabled"
+    ::= { informationals 4 }
+
+tpdHidsDisabled                 NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr,
+        user
+    }
+    STATUS current
+    DESCRIPTION
+        "HIDS monitoring has been disabled"
+    ::= { informationals 5 }
+
+tpdHidsSuspended                NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr,
+        user
+    }
+    STATUS current
+    DESCRIPTION
+        "HIDS monitoring has been suspended"
+    ::= { informationals 6 }
+
+tpdHidsResumed                  NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr,
+        user
+    }
+    STATUS current
+    DESCRIPTION
+        "HIDS monitoring has been resumed"
+    ::= { informationals 7 }
+
+tpdHidsBaselineUpdated          NOTIFICATION-TYPE
+    OBJECTS {
+        trapSequenceNumber,
+        alarmLocation,
+        alarmState,
+        alarmId,
+        alarmSeverity,
+        alarmText,
+        alarmTime,
+        bindVarNamesValuesStr,
+        alarmNumber,
+        alarmEventType,
+        alarmProbableCause,
+        alarmAdditionalInfoStr,
+        user,
+        modifiedFileName,
+        modifiedFileLocation
+    }
+    STATUS current
+    DESCRIPTION
+        "HIDS baseline has been updated"
+    ::= { informationals 8 }
+
+-- --------------------------------------------------------------------------
+--                       TPD Alarm Status
+-- --------------------------------------------------------------------------
+tpdAlarmStatus OBJECT IDENTIFIER ::= { tpdAlarms 2 }
+
+tpdAlarmSequenceNumber OBJECT-TYPE
+	SYNTAX		Counter32
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"The sequence number that will be sent with next alarm notification."
+	::= { tpdAlarmStatus 1 }
+
+tpdAlarmCount OBJECT-TYPE
+	SYNTAX		Gauge32
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"The current number of active alarms."
+	::= { tpdAlarmStatus 2 }
+
+tpdAlarmTable OBJECT-TYPE
+	SYNTAX		SEQUENCE OF TPDAlarmEntry
+	MAX-ACCESS	not-accessible
+	STATUS		current
+	DESCRIPTION
+		"A list of alarm table entries. The table contains
+		zero, one, or many rows at any moment, depending upon
+		the number of outstanding alarms. The number of rows in
+		the table at any given time is reflected by the value of
+		tpdAlarmCount."
+	::= { tpdAlarmStatus 3 }
+
+tpdAlarmEntry OBJECT-TYPE
+	SYNTAX		TPDAlarmEntry
+	MAX-ACCESS	not-accessible
+	STATUS		current
+	DESCRIPTION
+		"Alarm table entry."
+    INDEX       { tpdAlarmIndex }
+	::= { tpdAlarmTable 1 }
+
+TPDAlarmEntry ::= SEQUENCE {
+	tpdAlarmIndex				Counter32,
+	tpdAlarmOid					OBJECT IDENTIFIER,
+	tpdAlarmLocation			AlarmLocation,
+	tpdAlarmId					AlarmId,
+	tpdAlarmSeverity			AlarmSeverity,
+	tpdAlarmText				AlarmText,
+	tpdAlarmTime				DateAndTime,
+	tpdbindVarNamesValuesStr	DisplayString,
+	tpdAlarmNumber				AlarmNumber,
+    tpdAlarmEventType       	AlarmEventType,
+    tpdAlarmProbableCause   	AlarmProbableCause,
+	tpdalarmAdditionalInfoStr	DisplayString
+	}
+
+tpdAlarmIndex OBJECT-TYPE
+	SYNTAX		Counter32
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"The current alarmTable index."
+	::= { tpdAlarmEntry 1 }
+
+tpdAlarmOid OBJECT-TYPE
+	SYNTAX		OBJECT IDENTIFIER
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION "OID of this alarm notification"
+	::= { tpdAlarmEntry 2 }
+
+tpdAlarmLocation OBJECT-TYPE
+    SYNTAX      AlarmLocation
+    MAX-ACCESS  read-only
+    STATUS      current
+	DESCRIPTION "Location of this alarm"
+	::= { tpdAlarmEntry 3 }
+
+tpdAlarmId OBJECT-TYPE
+	SYNTAX		AlarmId
+	MAX-ACCESS	read-only
+	STATUS		deprecated
+	DESCRIPTION "Id of this alarm notification"
+	::= { tpdAlarmEntry 4 }
+
+tpdAlarmSeverity OBJECT-TYPE
+	SYNTAX		AlarmSeverity
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION "Severity of this alarm notification"
+	::= { tpdAlarmEntry 5 }
+
+tpdAlarmText OBJECT-TYPE
+	SYNTAX		AlarmText
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION "Text description of this alarm"
+	::= { tpdAlarmEntry 6 }
+
+tpdAlarmTime OBJECT-TYPE
+	SYNTAX		DateAndTime
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION "Time stamp for the alarm event"
+	::= { tpdAlarmEntry 7 }
+
+tpdbindVarNamesValuesStr OBJECT-TYPE
+	SYNTAX		DisplayString
+	MAX-ACCESS	read-only
+	STATUS		deprecated
+	DESCRIPTION "Pipe delimited list of bind variable name/value pairs to be used as key along with alarm Id"
+	::= { tpdAlarmEntry 8 }
+
+tpdAlarmNumber OBJECT-TYPE
+    SYNTAX      AlarmNumber
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Id of this alarm notification"
+    ::= { tpdAlarmEntry 9 }
+
+tpdAlarmEventType OBJECT-TYPE
+    SYNTAX      AlarmEventType
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Description of the event type for this alarm"
+    ::= { tpdAlarmEntry 10 }
+
+tpdAlarmProbableCause OBJECT-TYPE
+    SYNTAX      AlarmProbableCause
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Description of the probable cause for this alarm"
+    ::= { tpdAlarmEntry 11 }
+
+tpdalarmAdditionalInfoStr OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Pipe delimited list of bind variable name/value/usefulness triplets to be used as key along with alarm Id"
+    ::= { tpdAlarmEntry 12 }
+
+tpdHistoricalAlarmTable OBJECT-TYPE
+	SYNTAX		SEQUENCE OF TPDHistoricalAlarmEntry
+	MAX-ACCESS	not-accessible
+	STATUS		current
+	DESCRIPTION
+		"A list of historical alarm table entries. The table contains
+		zero, one, or many rows at any moment, depending upon
+		the number of alarms within the last 24 hours." 
+	::= { tpdAlarmStatus 4 }
+
+tpdHistoricalAlarmEntry OBJECT-TYPE
+	SYNTAX		TPDHistoricalAlarmEntry
+	MAX-ACCESS	not-accessible
+	STATUS		current
+	DESCRIPTION
+		"Alarm table entry."
+    INDEX       { tpdHistoricalAlarmIndex }
+	::= { tpdHistoricalAlarmTable 1 }
+
+TPDHistoricalAlarmEntry ::= SEQUENCE {
+	tpdHistoricalAlarmIndex				Counter32,
+	tpdHistoricalAlarmOid				OBJECT IDENTIFIER,
+	tpdHistoricalAlarmLocation			AlarmLocation,
+	tpdHistoricalAlarmId				AlarmId,
+	tpdHistoricalAlarmSeverity			AlarmSeverity,
+	tpdHistoricalAlarmText				AlarmText,
+	tpdHistoricalAlarmTime				DateAndTime,
+	historicalBindVarNamesValuesStr		DisplayString,
+	tpdHistoricalAlarmNumber			AlarmNumber,
+    tpdHistoricalAlarmEventType         AlarmEventType,
+    tpdHistoricalAlarmProbableCause     AlarmProbableCause,
+	historicalAlarmAdditionalInfoStr	DisplayString
+	}
+
+tpdHistoricalAlarmIndex OBJECT-TYPE
+	SYNTAX		Counter32
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"The current alarmTable index."
+	::= { tpdHistoricalAlarmEntry 1 }
+
+tpdHistoricalAlarmOid OBJECT-TYPE
+	SYNTAX		OBJECT IDENTIFIER
+	MAX-ACCESS	read-only
+	STATUS		deprecated
+	DESCRIPTION "OID of this alarm notification"
+	::= { tpdHistoricalAlarmEntry 2 }
+
+tpdHistoricalAlarmLocation OBJECT-TYPE
+    SYNTAX      AlarmLocation
+    MAX-ACCESS  read-only
+    STATUS      current
+	DESCRIPTION "Location of this alarm"
+	::= { tpdHistoricalAlarmEntry 3 }
+
+tpdHistoricalAlarmId OBJECT-TYPE
+	SYNTAX		AlarmId
+	MAX-ACCESS	read-only
+	STATUS		deprecated
+	DESCRIPTION "Id of this alarm notification"
+	::= { tpdHistoricalAlarmEntry 4 }
+
+tpdHistoricalAlarmSeverity OBJECT-TYPE
+	SYNTAX		AlarmSeverity
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION "Severity of this alarm notification"
+	::= { tpdHistoricalAlarmEntry 5 }
+
+tpdHistoricalAlarmText OBJECT-TYPE
+	SYNTAX		AlarmText
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION "Text description of this alarm"
+	::= { tpdHistoricalAlarmEntry 6 }
+
+tpdHistoricalAlarmTime OBJECT-TYPE
+	SYNTAX		DateAndTime
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION "Time stamp for the alarm event"
+	::= { tpdHistoricalAlarmEntry 7 }
+
+historicalBindVarNamesValuesStr OBJECT-TYPE
+	SYNTAX		DisplayString
+	MAX-ACCESS	read-only
+	STATUS		deprecated
+	DESCRIPTION "Pipe delimited list of bind variable name/value pairs to be used as key along with alarm Id"
+	::= { tpdHistoricalAlarmEntry 8 }
+
+tpdHistoricalAlarmNumber OBJECT-TYPE
+    SYNTAX      AlarmNumber
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Id of this alarm notification"
+    ::= { tpdHistoricalAlarmEntry 9 }
+
+tpdHistoricalAlarmEventType OBJECT-TYPE
+    SYNTAX      AlarmEventType
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Description of the event type for this alarm"
+    ::= { tpdHistoricalAlarmEntry 10 }
+
+tpdHistoricalAlarmProbableCause OBJECT-TYPE
+    SYNTAX      AlarmProbableCause
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Description of the probable cause for this alarm"
+    ::= { tpdHistoricalAlarmEntry 11 }
+
+historicalAlarmAdditionalInfoStr OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Pipe delimited list of variable name/value/usefulness triplets to be used as key along with alarm Id"
+    ::= { tpdHistoricalAlarmEntry 12 }
+
+END
+-- vi:ts=4 sw=4:nohls
