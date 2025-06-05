@@ -11,12 +11,8 @@ class Config:
 
     # Application configuration
     LOG_LEVEL = config('LOG_LEVEL', default='INFO')
-    # MIB_PATH = '/custom-mibs'
     TRAP_LOG_FILE = '/app/logs/traps.log'
     APP_LOG_FILE = '/app/logs/processor.log'
-
-    # TRAP_LOG_FILE = '../logs/traps.log'
-    # APP_LOG_FILE = '../logs/processor.log'
 
     # Database URL
     DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"

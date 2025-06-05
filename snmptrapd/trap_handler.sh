@@ -53,15 +53,18 @@ escape_json() {
 # Function to determine trap severity based on OID
 get_trap_severity() {
     local trap_oid="$1"
-    case "$trap_oid" in
-        *".1.3.6.1.6.3.1.1.5.1"|*"coldStart") echo "warning" ;;
-        *".1.3.6.1.6.3.1.1.5.2"|*"warmStart") echo "info" ;;
-        *".1.3.6.1.6.3.1.1.5.3"|*"linkDown") echo "error" ;;
-        *".1.3.6.1.6.3.1.1.5.4"|*"linkUp") echo "info" ;;
-        *".1.3.6.1.6.3.1.1.5.5"|*"authenticationFailure") echo "critical" ;;
-        *".1.3.6.1.6.3.1.1.5.6"|*"egpNeighborLoss") echo "warning" ;;
-        *) echo "info" ;;
-    esac
+    local eagle_severity="$2"
+    # Check for EagleXgDsrAlarmSeverity value if present
+    if [[ -n "$eagle_severity" ]]; then
+        case "$eagle_severity" in
+            1|"critical") echo "critical" ;;
+            2|"major") echo "major" ;;
+            3|"minor") echo "minor" ;;
+            4|"info") echo "info" ;;
+            5|"clear") echo "clear" ;;
+            *) echo "info" ;;
+        esac
+    fi
 }
 
 # Main processing function
@@ -77,6 +80,7 @@ process_trap() {
     local trap_name=""
     local uptime=""
     local severity="info"
+    local eagle_severity=""
     local line_count=0
 
     # Arrays for OID-value pairs
@@ -125,18 +129,22 @@ process_trap() {
                     case "$oid" in
                         "SNMPv2-MIB::snmpTrapOID.0"|".1.3.6.1.6.3.1.1.4.1.0")
                             trap_oid="$value"
-                            severity=$(get_trap_severity "$value")
-                            # Extract trap name from OID
                             trap_name=$(echo "$value" | sed 's/.*:://; s/\.0$//')
                             ;;
                         "DISMAN-EVENT-MIB::sysUpTimeInstance"|".1.3.6.1.2.1.1.3.0")
                             uptime="$value"
+                            ;;
+                        "EAGLEXGDSR-MIB::eagleXgDsrAlarmSeverity"|".1.3.6.1.4.1.323.5.3.28.1.1.3.5.1.7")
+                            eagle_severity="$value"
                             ;;
                     esac
                 fi
                 ;;
         esac
     done
+
+    # Determine severity, prioritizing EagleXgDsrAlarmSeverity
+    severity=$(get_trap_severity "$trap_oid" "$eagle_severity")
 
     # Create JSON log entry
     local varbinds_json=""

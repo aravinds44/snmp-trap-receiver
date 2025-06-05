@@ -78,7 +78,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT COUNT(*) as \"Total Traps (24h)\" FROM snmp_traps WHERE $__timeFilter(timestamp)",
+          "rawSql": "SELECT COUNT(*) as \"Total Traps \" FROM snmp_traps WHERE $__timeFilter(timestamp)",
           "refId": "A",
           "sql": {
             "columns": [
@@ -99,7 +99,7 @@
           }
         }
       ],
-      "title": "Total Traps (24h)",
+      "title": "Total Traps ",
       "type": "stat"
     },
     {
@@ -163,7 +163,7 @@
           "refId": "A"
         }
       ],
-      "title": "Unique Source IPs (24h)",
+      "title": "Unique Source IPs ",
       "type": "stat"
     },
     {
@@ -303,7 +303,7 @@
           "refId": "A"
         }
       ],
-      "title": "High Severity Traps (24h)",
+      "title": "High Severity Traps ",
       "type": "stat"
     },
     {
@@ -401,7 +401,7 @@
           "refId": "A"
         }
       ],
-      "title": "Trap Volume (Last 24h)",
+      "title": "Trap Volume",
       "type": "timeseries"
     },
     {
@@ -424,7 +424,98 @@
           },
           "mappings": []
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "critical"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "red"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "major"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "orange"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "minor"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "info"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "clear"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "unknown"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "gray"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -468,7 +559,7 @@
           "refId": "A"
         }
       ],
-      "title": "Traps by Severity (24h)",
+      "title": "Traps by Severity ",
       "type": "piechart"
     },
     {

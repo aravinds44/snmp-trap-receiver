@@ -4,11 +4,11 @@ datasources:
   - name: PostgreSQL-SNMP
     type: postgres
     access: proxy
-    url: snmp-psql:5432
-    database: snmptraps
-    user: snmpuser
+    url: ${POSTGRES_HOST}:${POSTGRES_PORT}
+    database: ${POSTGRES_DB}
+    user: ${POSTGRES_USER}
     secureJsonData:
-      password: snmppass123
+      password: ${POSTGRES_PASSWORD}
     jsonData:
       sslmode: disable
       postgresVersion: 1500
