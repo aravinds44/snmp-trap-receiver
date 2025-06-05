@@ -33,6 +33,8 @@ services:
       - ./logs:/var/log/snmp:rw
       - ./mibs:/custom-mibs:ro
     environment:
+      - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
+      - MIBS=+ALL
       - SNMP_USER=${SNMP_USER:-snmpv3user}
       - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
       - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}

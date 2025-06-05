@@ -1,0 +1,143 @@
+-- *****************************************************************************
+-- Copyright (C) 2003, 2016, Oracle and/or its affiliates. All rights reserved.
+-- *****************************************************************************
+TEKELEC-TOPLEVEL-REG DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY,
+    enterprises	FROM SNMPv2-SMI;
+
+--   SNMPv2-SMI  from RFC1902
+
+tekelecCorp MODULE-IDENTITY
+    LAST-UPDATED "202210120000Z"
+    ORGANIZATION "Tekelec, Inc."
+    CONTACT-INFO "
+         Postal: Tekelec, Inc.
+                 5200 Paramount Parkway
+                 Morrisville, NC 27560
+                 USA
+
+        Website: http://www.tekelec.com/support/
+
+          Email: support@tekelec.com
+
+            Tel:
+    US & Canada: 888.367.8552
+          India: +91.124.436.8552
+          China: +65.6248.4510
+    UK & Europe: +44.1784.467.804"
+
+    DESCRIPTION
+        "This MIB tracks the top-level definitions of subtrees
+         as documented in TR003056.
+         Copyright (C) 2003, 2022, Oracle and/or its affiliates. All rights reserved."
+
+-- --------------------------------------------------------------------------
+--                             REVISION HISTORY
+--  
+--  There should be one REVISION/DESCRIPTION pair for each revision of the
+--  file.  Revisions should appear in reverse chronological order (the newest
+--  revision at the top).
+-- --------------------------------------------------------------------------
+    REVISION "202210120000Z"
+    DESCRIPTION
+	"TPD 8.x Merge Activity- Updated with CNE product ID definitions."	
+ 
+    REVISION "202210110000Z"
+    DESCRIPTION
+	"TPD 8.x Merge Activity- Updated tekelecEAGLEEMS to tekelecEagleEMS."
+
+    REVISION "201412170000Z"
+    DESCRIPTION
+        "Updated Oracle copyright for 2015."
+
+    REVISION "201412050000Z"
+    DESCRIPTION
+        "Updated description copyright."
+
+    REVISION "201404040000Z"
+    DESCRIPTION
+        "Adding Oracle Copyright"
+
+    REVISION "201304040000Z"
+    DESCRIPTION
+        "Adding tekelecUDR definition"
+
+    REVISION "201207110000Z"
+    DESCRIPTION
+        "Enhancing as per FE007019"
+
+    REVISION "201202280000Z"
+    DESCRIPTION
+        "Adding initial revision history"
+
+    REVISION "200211270000Z"
+    DESCRIPTION
+        "Initial release"
+
+::= { enterprises 323 }
+
+tekelecPrivate			OBJECT IDENTIFIER ::= { tekelecCorp  1 }
+tekelecRegistration		OBJECT IDENTIFIER ::= { tekelecCorp  2 }
+tekelecGeneric			OBJECT IDENTIFIER ::= { tekelecCorp  3 }
+tekelecCapabilities		OBJECT IDENTIFIER ::= { tekelecCorp  4 }
+tekelecProductGroups		OBJECT IDENTIFIER ::= { tekelecCorp  5 }
+tekelecRequirements		OBJECT IDENTIFIER ::= { tekelecCorp  6 }
+tekelecExperimental		OBJECT IDENTIFIER ::= { tekelecCorp  7 }
+
+tekelecCallCenterGroup		OBJECT IDENTIFIER ::= { tekelecProductGroups  1 }
+tekelecDiagnosticsGroup		OBJECT IDENTIFIER ::= { tekelecProductGroups  2 }
+tekelecSwitchingGroup		OBJECT IDENTIFIER ::= { tekelecProductGroups  3 }
+
+experimental			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  1 }
+generic				OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  2 }
+tekelecEAGLE			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  3 }
+tekelecLSMS			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  4 }
+tekelecOAP			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  5 }
+tekelecIP7			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  6 }
+tekelecINSIGHT7			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  7 }
+tekelecTALON			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  8 }
+tekelecVOX			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  9 }
+tekelecSCP			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  10 }
+tekelecIVR			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  11 }
+tekelecNetworkSwitch		OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  12 }
+tekelecSentinel			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  13 }
+tekelecTekServer		OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  14 }
+tekelecIP7EDGE			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  15 }
+tekelecTekCore			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  16 }
+tekelecSMAC			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  17 }
+tekelecTPD			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  18 }
+tekelecExtensions		OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  19 }
+tekelecEPAP			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  20 }
+tekelecELAP			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  21 }
+tekelecEAGLEXGServiceBroker	OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  22 }
+tekelecECAP			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  23 }
+tekelecEagleEMS			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  24 }
+tekelecEAGLEXGHlrRouter		OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  25 }
+tekelecEAGLEXGNPQueryRouter	OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  26 }
+tekelecIAS			OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  27 }
+tekelecEAGLEXGDSR               OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  28 }
+tekelecPCRF                     OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  29 }
+tekelecSDS                      OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  30 }
+tekelecTVOE                     OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  31 }
+tekelecUDR                      OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  32 }
+oracleVNFM                      OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  33 }
+oracleCNE                       OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  34 }
+oracleSCP                       OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  35 }
+oracleNRF                       OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  36 }
+oraclePCF                       OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  37 }
+oracleBSF                       OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  38 }
+oracleNEF                       OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  39 }
+oracleNSSF                      OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  40 }
+oracleUDSF                      OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  41 }
+oracleUDM                       OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  42 }
+oracle5GUDR                     OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  43 }
+oracleAUSF                      OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  44 }
+oracleNWDAF                     OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  45 }
+oracleSEPP                      OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  46 }
+oracleIWF                       OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  47 }
+oracleCNDRA                     OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  48 }
+oracleCNPCRF                    OBJECT IDENTIFIER ::= { tekelecSwitchingGroup  49 }
+
+END
