@@ -1,0 +1,18 @@
+apiVersion: 1
+
+datasources:
+  - name: PostgreSQL-SNMP
+    type: postgres
+    access: proxy
+    url: postgres:5432
+    database: snmptraps
+    user: snmpuser
+    secureJsonData:
+      password: snmppass
+    jsonData:
+      sslmode: disable
+      postgresVersion: 1500
+      timescaledb: false
+    isDefault: true
+    version: 1
+    editable: true
