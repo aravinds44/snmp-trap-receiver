@@ -4,7 +4,7 @@ datasources:
   - name: PostgreSQL-SNMP
     type: postgres
     access: proxy
-    url: postgres:5432
+    url: snmp-psql:5432
     database: snmptraps
     user: snmpuser
     secureJsonData:
