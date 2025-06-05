@@ -3,6 +3,7 @@
 -- Create database if it doesn't exist (handled by docker-entrypoint)
 -- CREATE DATABASE IF NOT EXISTS snmptraps;
 
+-- ALTER USER snmpuser PASSWORD 'snmppass';
 -- Create schema for SNMP traps
 CREATE SCHEMA IF NOT EXISTS snmp;
 

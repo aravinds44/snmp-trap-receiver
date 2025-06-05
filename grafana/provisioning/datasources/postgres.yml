@@ -8,7 +8,7 @@ datasources:
     database: snmptraps
     user: snmpuser
     secureJsonData:
-      password: snmppass
+      password: snmppass123
     jsonData:
       sslmode: disable
       postgresVersion: 1500

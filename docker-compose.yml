@@ -1,15 +1,13 @@
 version: '3.8'
 
 services:
-  postgres:
+  snmp-psql:
     image: postgres:15-alpine
     container_name: snmp-postgres
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-snmptraps}
       POSTGRES_USER: ${POSTGRES_USER:-snmpuser}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-snmppass}
-      POSTGRES_HOST_AUTH_METHOD: "scram-sha-256"
-      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
@@ -55,7 +53,7 @@ services:
     volumes:
       - ./logs:/app/logs:rw
     environment:
-      - DB_HOST=postgres
+      - DB_HOST=snmp-psql
       - DB_PORT=5432
       - DB_NAME=${POSTGRES_DB:-snmptraps}
       - DB_USER=${POSTGRES_USER:-snmpuser}
@@ -64,7 +62,7 @@ services:
     networks:
       - snmp-network
     depends_on:
-      postgres:
+      snmp-psql:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import psycopg2; psycopg2.connect(host='postgres', database='${POSTGRES_DB:-snmptraps}', user='${POSTGRES_USER:-snmpuser}', password='${POSTGRES_PASSWORD:-snmppass}')"]
@@ -106,7 +104,7 @@ services:
     networks:
       - snmp-network
     depends_on:
-      postgres:
+      snmp-psql:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
