@@ -449,3 +449,12 @@
 2025-06-05 16:53:46,582 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
 2025-06-05 16:56:15,356 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
 2025-06-05 17:05:51,410 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-06 19:45:41,098 - __main__ - INFO - Trap processor initialized
+2025-06-06 19:45:41,122 - __main__ - INFO - Database connection established
+2025-06-06 19:45:41,123 - __main__ - INFO - SNMP Trap Processor started - monitoring trap log
+2025-06-06 19:45:41,139 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-06 19:45:41,140 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-06 19:45:41,140 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-06 19:45:41,141 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-06 19:45:41,142 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify
+2025-06-06 19:45:41,143 - __main__ - INFO - Stored trap from 127.0.0.1 - eagleXgDsrDbReplicationFaultNotify

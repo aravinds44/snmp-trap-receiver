@@ -23,7 +23,7 @@ services:
 
   snmptrapd:
     build:
-      context: ./snmptrapd
+      context: snmptrapd
     container_name: snmp-trapd
     ports:
       - "162:162/udp"
@@ -48,7 +48,7 @@ services:
 
   trap-processor:
     build:
-      context: ./trap-processor
+      context: trap-processor
     container_name: snmp-processor
     volumes:
       - ./logs:/app/logs:rw
@@ -72,7 +72,7 @@ services:
 
   trap-sender:
     build:
-      context: ./trap-sender
+      context: trap-sender
     container_name: snmp-sender
     volumes:
       - ./mibs:/custom-mibs:ro
