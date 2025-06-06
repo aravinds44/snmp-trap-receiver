@@ -9,10 +9,10 @@ RUN mkdir -p /var/log/snmp /etc/snmp && touch /var/log/snmp/traps.log && \
 
 # Copy configuration and scripts
 COPY snmptrapd.conf /etc/snmp/snmptrapd.conf
-COPY trap_handler.sh /usr/local/bin/trap_handler.sh
+COPY trap_handler.py /usr/local/bin/trap_handler.py
 
 # Make scripts executable
-RUN chmod +x /usr/local/bin/trap_handler.sh
+RUN chmod +x /usr/local/bin/trap_handler.py
 
 # Expose SNMP trap port
 EXPOSE 162/udp
