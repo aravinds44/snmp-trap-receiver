@@ -12,7 +12,7 @@ class Config:
     # Application configuration
     LOG_LEVEL = config('LOG_LEVEL', default='INFO')
     TRAP_LOG_FILE = '/app/logs/traps.log'
-    APP_LOG_FILE = '/app/logs/processor.log'
+    APP_LOG_FILE = '/app/processor.log'
 
     # Database URL
     DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
