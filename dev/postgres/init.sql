@@ -97,17 +97,6 @@ CREATE TRIGGER trigger_update_snmp_traps_updated_at
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
--- Insert some example trap types for reference
-INSERT INTO snmp_traps (source_ip, trap_oid, trap_name, variable_bindings, raw_data)
-VALUES
-    ('127.0.0.1', '1.3.6.1.6.3.1.1.5.3', 'linkDown',
-     '[{"oid": "1.3.6.1.2.1.2.2.1.1", "resolved_name": "ifIndex", "value": "1", "description": "Interface index"}]',
-     '{"example": "Initial test data"}'),
-    ('127.0.0.1', '1.3.6.1.6.3.1.1.5.4', 'linkUp',
-     '[{"oid": "1.3.6.1.2.1.2.2.1.1", "resolved_name": "ifIndex", "value": "1", "description": "Interface index"}]',
-     '{"example": "Initial test data"}')
-    ON CONFLICT DO NOTHING;
-
 -- Grant permissions (adjust as needed for production)
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO snmpuser;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO snmpuser;

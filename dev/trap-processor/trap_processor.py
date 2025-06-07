@@ -3,11 +3,12 @@
 import sys
 import json
 import logging
-import time  # Added missing import
+import time
 from datetime import datetime, timezone
 from typing import Dict, Optional
 
 from confluent_kafka import Consumer, KafkaError, KafkaException
+from confluent_kafka.admin import AdminClient, NewTopic
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -34,9 +35,9 @@ class TrapProcessor:
             'enable.auto.commit': False,
             'session.timeout.ms': 10000,
             'socket.timeout.ms': 10000,
-            'client.id': 'snmp-trap-processor-1',  # Added client identification
-            'metadata.max.age.ms': 30000,  # Refresh metadata every 30s
-            'reconnect.backoff.max.ms': 10000  # Max delay between reconnects
+            'client.id': 'snmp-trap-processor-1',
+            'metadata.max.age.ms': 30000,
+            'reconnect.backoff.max.ms': 10000
         }
         self.db_config = {
             'host': 'snmp-psql',
@@ -47,6 +48,7 @@ class TrapProcessor:
         }
         self.consumer = None
         self.db_engine = None
+        self.admin_client = AdminClient({'bootstrap.servers': self.kafka_config['bootstrap.servers']})
         self._initialize_components()
 
     def _initialize_components(self):
@@ -54,38 +56,81 @@ class TrapProcessor:
         max_retries = 5
         retry_delay = 5
 
-        # Initialize Kafka consumer with better error handling
+        # Initialize Kafka components
+        self._initialize_kafka(max_retries, retry_delay)
+
+        # Initialize database connection
+        self._initialize_database(max_retries, retry_delay)
+
+    def _initialize_kafka(self, max_retries, retry_delay):
+        """Initialize Kafka consumer with topic creation if needed"""
         for attempt in range(max_retries):
             try:
+                # First check if topic exists or create it
+                if not self._kafka_topic_exists('snmp_traps'):
+                    self.logger.warning("Topic 'snmp_traps' not found - attempting to create")
+                    self._create_kafka_topic('snmp_traps', num_partitions=1, replication_factor=1)
+                    self.logger.info("Topic 'snmp_traps' created successfully")
+
+                # Now initialize consumer
                 self.consumer = Consumer(self.kafka_config)
-
-                # Verify Kafka connectivity and topic existence
-                metadata = self.consumer.list_topics(timeout=10)
-                if 'snmp_traps' not in metadata.topics:
-                    self.logger.error("Topic 'snmp_traps' does not exist in Kafka")
-                    raise KafkaException(KafkaError.UNKNOWN_TOPIC_OR_PART)
-
                 self.consumer.subscribe(['snmp_traps'])
-                self.logger.info("Kafka consumer initialized successfully")
-                break
+                self.logger.info("Kafka consumer initialized and subscribed to 'snmp_traps'")
+                return True
+
             except KafkaException as e:
-                self.logger.warning(f"Kafka initialization attempt {attempt + 1} failed: {e}")
+                self.logger.warning(f"Kafka initialization attempt {attempt + 1} failed: {str(e)}")
                 if attempt == max_retries - 1:
-                    self.logger.error("Failed to initialize Kafka consumer after maximum retries")
+                    self.logger.error("Max retries reached for Kafka initialization")
                     raise
                 time.sleep(retry_delay * (attempt + 1))
             except Exception as e:
-                self.logger.error(f"Unexpected error initializing Kafka consumer: {e}")
+                self.logger.error(f"Unexpected error during Kafka initialization: {str(e)}")
                 raise
 
-        # Initialize database connection
+    def _kafka_topic_exists(self, topic_name):
+        """Check if topic exists in Kafka"""
+        try:
+            metadata = self.admin_client.list_topics(timeout=10)
+            return topic_name in metadata.topics
+        except Exception as e:
+            self.logger.error(f"Error checking topic existence: {str(e)}")
+            raise
+
+    def _create_kafka_topic(self, topic_name, num_partitions, replication_factor):
+        """Create a new Kafka topic"""
+        try:
+            topic = NewTopic(
+                topic_name,
+                num_partitions=num_partitions,
+                replication_factor=replication_factor,
+                config={
+                    'retention.ms': '604800000'  # 7 days retention
+                }
+            )
+
+            futures = self.admin_client.create_topics([topic], operation_timeout=30)
+
+            for topic_name, future in futures.items():
+                try:
+                    future.result()  # Wait for topic creation
+                    self.logger.info(f"Topic '{topic_name}' creation successful")
+                except Exception as e:
+                    self.logger.error(f"Failed to create topic '{topic_name}': {str(e)}")
+                    raise
+        except Exception as e:
+            self.logger.error(f"Error creating topic: {str(e)}")
+            raise
+
+    def _initialize_database(self, max_retries, retry_delay):
+        """Initialize database connection with retries"""
         for attempt in range(max_retries):
             try:
                 self.db_engine = create_engine(
                     f"postgresql://{self.db_config['user']}:{self.db_config['password']}@"
                     f"{self.db_config['host']}:{self.db_config['port']}/{self.db_config['database']}",
-                    pool_pre_ping=True,  # Test connections before use
-                    pool_recycle=3600  # Recycle connections after 1 hour
+                    pool_pre_ping=True,
+                    pool_recycle=3600
                 )
                 # Test connection with a simple query
                 with self.db_engine.connect() as conn:
@@ -228,8 +273,10 @@ class TrapProcessor:
         except KeyboardInterrupt:
             self.logger.info("Shutting down gracefully...")
         finally:
-            self.consumer.close()
-            self.db_engine.dispose()
+            if self.consumer:
+                self.consumer.close()
+            if self.db_engine:
+                self.db_engine.dispose()
             self.logger.info("Processor shutdown complete")
 
 if __name__ == '__main__':
