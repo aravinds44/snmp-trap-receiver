@@ -67,25 +67,35 @@ class SNMPTrapHandler:
             error_handler = logging.FileHandler(self.error_log)
             error_handler.setFormatter(formatter)
             self.error_logger.addHandler(error_handler)
-        except Exception:
+        except Exception as e:
             # Fallback to console if file logging fails
             console_handler = logging.StreamHandler()
             console_handler.setFormatter(formatter)
             self.error_logger.addHandler(console_handler)
+            self.error_logger.error(f"Failed to setup file logging: {e}")
 
-        # Setup syslog
+        # Setup syslog - with better fallback handling
         self.syslog_logger = logging.getLogger('snmp_trap_syslog')
         self.syslog_logger.setLevel(logging.INFO)
 
+        # Try syslog first, then fallback to console
+        syslog_available = False
         try:
             syslog_handler = logging.handlers.SysLogHandler(address='/dev/log')
             syslog_formatter = logging.Formatter('snmp-trap-handler: %(message)s')
             syslog_handler.setFormatter(syslog_formatter)
             self.syslog_logger.addHandler(syslog_handler)
-        except Exception:
-            # Fallback to console if syslog is not available
-            console_handler = logging.StreamHandler()
-            self.syslog_logger.addHandler(console_handler)
+            syslog_available = True
+        except Exception as e:
+            self.error_logger.error(f"Syslog unavailable: {e}")
+
+        # Always add console handler as fallback
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(logging.Formatter('%(message)s'))
+        self.syslog_logger.addHandler(console_handler)
+
+        if not syslog_available:
+            self.syslog_logger.info("Syslog unavailable, using console logging")
 
     def _initialize_redis(self):
         """Initialize Redis connection with retry logic."""
@@ -226,10 +236,11 @@ class SNMPTrapHandler:
             current_time = datetime.now(timezone.utc)
             stats_data = {
                 'total_traps': 1,
-                'last_trap_time': trap_data['timestamp'],
                 f"severity_{trap_data['trap']['severity']}": 1,
                 f"host_{trap_data['trap']['host']}": 1
             }
+            # Set the timestamp separately (not with HINCRBY)
+            pipe.hset(self.stats_key, 'last_trap_time', trap_data['timestamp'])
 
             for key, value in stats_data.items():
                 pipe.hincrby(self.stats_key, key, value)

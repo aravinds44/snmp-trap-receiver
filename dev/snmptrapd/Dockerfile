@@ -13,7 +13,20 @@ RUN apk update && apk add --no-cache \
     musl-dev \
     python3-dev \
     postgresql-dev \
+    rsyslog \
     && rm -rf /var/cache/apk/*
+
+# Configure rsyslog
+RUN apk add --no-cache rsyslog && \
+    mkdir -p /var/run/rsyslog && \
+    touch /var/log/messages && \
+    chmod 666 /var/log/messages && \
+    echo '$ModLoad imuxsock' > /etc/rsyslog.conf && \
+#    echo '$ModLoad imklog' >> /etc/rsyslog.conf && \
+    echo '$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat' >> /etc/rsyslog.conf && \
+    echo '$template TraditionalFormat,"%timegenerated% %HOSTNAME% %syslogtag%%msg%"' >> /etc/rsyslog.conf && \
+    echo '*.info;mail.none;authpriv.none;cron.none -/var/log/messages' >> /etc/rsyslog.conf && \
+    echo '$IncludeConfig /etc/rsyslog.d/*.conf' >> /etc/rsyslog.conf
 
 # Create symlink for python (some scripts may expect 'python' command)
 RUN ln -sf python3 /usr/bin/python
@@ -83,4 +96,4 @@ WORKDIR /home/snmp
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 # Default command
-CMD ["snmptrapd", "-f", "-Lo", "-p", "/tmp/snmptrapd.pid"]
+CMD ["sh", "-c", "rsyslogd -n & exec snmptrapd -f -Lo -p /tmp/snmptrapd.pid"]
