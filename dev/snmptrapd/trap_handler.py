@@ -320,7 +320,7 @@ class SNMPTrapHandler:
                             trap_name = re.sub(r'\.0$', '', trap_name)
                         elif oid in ["DISMAN-EVENT-MIB::sysUpTimeInstance", ".1.3.6.1.2.1.1.3.0"]:
                             uptime = value
-                        elif oid in ["EAGLEXGDSR-MIB::eagleXgDsrAlarmSeverity", ".1.3.6.1.4.1.323.5.3.28.1.1.3.5.1.7"]:
+                        elif "eaglexgdsralarmseverity" in oid.lower():
                             eagle_severity = value
 
             # Determine severity
