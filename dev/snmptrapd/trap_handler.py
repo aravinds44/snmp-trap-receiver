@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 """
-SNMP Trap Handler - Production Ready
-Description: Processes SNMP traps and logs them in structured format
+SNMP Trap Handler - Redis Integration
+Description: Processes SNMP traps and stores them in Redis
 Usage: Called by snmptrapd as trap handler
 """
 
@@ -15,23 +15,42 @@ import logging.handlers
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Dict, Tuple, Optional
+import redis
+from redis.exceptions import ConnectionError, TimeoutError, RedisError
 
 
 class SNMPTrapHandler:
-    """Handles SNMP trap processing and logging."""
+    """Handles SNMP trap processing and Redis storage."""
 
     def __init__(self):
         """Initialize the trap handler with configuration."""
-        self.log_file = "/var/log/snmp/traps.log"
+        # Redis configuration
+        self.redis_host = os.getenv('REDIS_HOST', 'localhost')
+        self.redis_port = int(os.getenv('REDIS_PORT', 6379))
+        self.redis_db = int(os.getenv('REDIS_DB', 0))
+        self.redis_password = os.getenv('REDIS_PASSWORD', None)
+        self.redis_socket_timeout = int(os.getenv('REDIS_SOCKET_TIMEOUT', 5))
+
+        # Redis keys configuration
+        self.trap_list_key = os.getenv('REDIS_TRAP_LIST_KEY', 'snmp:traps')
+        self.trap_hash_prefix = os.getenv('REDIS_TRAP_HASH_PREFIX', 'snmp:trap:')
+        self.stats_key = os.getenv('REDIS_STATS_KEY', 'snmp:stats')
+        self.max_list_length = int(os.getenv('REDIS_MAX_LIST_LENGTH', 10000))
+
+        # Fallback logging configuration
         self.error_log = "/var/log/snmp/trap_errors.log"
-        self.max_log_size = 100 * 1024 * 1024  # 100MB in bytes
-        self.syslog_facility = logging.handlers.SysLogHandler.LOG_LOCAL0
-        self.syslog_priority = logging.INFO
+        self.fallback_log = "/var/log/snmp/traps_fallback.log"
+
+        # Redis connection
+        self.redis_client = None
 
         # Setup logging
         self._setup_logging()
 
-        # Ensure log directory exists
+        # Initialize Redis connection
+        self._initialize_redis()
+
+        # Ensure log directory exists for fallback
         self._ensure_log_directory()
 
     def _setup_logging(self):
@@ -40,10 +59,19 @@ class SNMPTrapHandler:
         self.error_logger = logging.getLogger('snmp_trap_errors')
         self.error_logger.setLevel(logging.ERROR)
 
-        error_handler = logging.FileHandler(self.error_log)
-        error_formatter = logging.Formatter('%(asctime)s ERROR: %(message)s')
-        error_handler.setFormatter(error_formatter)
-        self.error_logger.addHandler(error_handler)
+        # Create formatter
+        formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s')
+
+        # File handler for errors
+        try:
+            error_handler = logging.FileHandler(self.error_log)
+            error_handler.setFormatter(formatter)
+            self.error_logger.addHandler(error_handler)
+        except Exception:
+            # Fallback to console if file logging fails
+            console_handler = logging.StreamHandler()
+            console_handler.setFormatter(formatter)
+            self.error_logger.addHandler(console_handler)
 
         # Setup syslog
         self.syslog_logger = logging.getLogger('snmp_trap_syslog')
@@ -54,52 +82,67 @@ class SNMPTrapHandler:
             syslog_formatter = logging.Formatter('snmp-trap-handler: %(message)s')
             syslog_handler.setFormatter(syslog_formatter)
             self.syslog_logger.addHandler(syslog_handler)
-        except Exception as e:
+        except Exception:
             # Fallback to console if syslog is not available
             console_handler = logging.StreamHandler()
             self.syslog_logger.addHandler(console_handler)
 
+    def _initialize_redis(self):
+        """Initialize Redis connection with retry logic."""
+        try:
+            self.redis_client = redis.Redis(
+                host=self.redis_host,
+                port=self.redis_port,
+                db=self.redis_db,
+                password=self.redis_password,
+                socket_timeout=self.redis_socket_timeout,
+                socket_connect_timeout=self.redis_socket_timeout,
+                decode_responses=True,
+                retry_on_timeout=True,
+                health_check_interval=30
+            )
+
+            # Test connection
+            self.redis_client.ping()
+            self.log_info("Redis connection established successfully")
+
+        except Exception as e:
+            self.log_error(f"Failed to initialize Redis connection: {e}")
+            self.redis_client = None
+
     def _ensure_log_directory(self):
         """Ensure log directory exists with proper permissions."""
-        log_dir = Path(self.log_file).parent
+        log_dir = Path(self.error_log).parent
         try:
             log_dir.mkdir(parents=True, exist_ok=True)
             os.chmod(log_dir, 0o755)
         except OSError as e:
-            self.log_error(f"Failed to create log directory: {e}")
-            raise
+            print(f"Warning: Failed to create log directory: {e}", file=sys.stderr)
 
     def log_error(self, message: str):
         """Log error message to both error log and syslog."""
         self.error_logger.error(message)
         self.syslog_logger.error(f"ERROR: {message}")
 
-    def rotate_log_if_needed(self):
-        """Rotate log file if it exceeds maximum size."""
+    def log_info(self, message: str):
+        """Log info message to syslog."""
+        self.syslog_logger.info(message)
+
+    def fallback_to_file(self, trap_data: dict):
+        """Fallback to file logging when Redis is unavailable."""
         try:
-            if os.path.exists(self.log_file):
-                file_size = os.path.getsize(self.log_file)
-                if file_size > self.max_log_size:
-                    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-                    backup_file = f"{self.log_file}.{timestamp}"
-                    os.rename(self.log_file, backup_file)
+            with open(self.fallback_log, 'a', encoding='utf-8') as f:
+                json.dump(trap_data, f, ensure_ascii=False, separators=(',', ':'))
+                f.write('\n')
 
-                    # Create new log file with proper permissions
-                    Path(self.log_file).touch()
-                    os.chmod(self.log_file, 0o644)
-        except OSError as e:
-            self.log_error(f"Failed to rotate log file: {e}")
+            # Set proper permissions
+            try:
+                os.chmod(self.fallback_log, 0o644)
+            except OSError:
+                pass
 
-    def escape_json_string(self, value: str) -> str:
-        """Escape string for JSON output."""
-        if not isinstance(value, str):
-            value = str(value)
-
-        # Remove trailing whitespace
-        value = value.rstrip()
-
-        # Use json.dumps to properly escape the string, then remove the surrounding quotes
-        return json.dumps(value)[1:-1]
+        except Exception as e:
+            self.log_error(f"Failed to write to fallback log: {e}")
 
     def get_trap_severity(self, trap_oid: str, eagle_severity: str) -> str:
         """Determine trap severity based on OID and EagleXgDsrAlarmSeverity."""
@@ -145,6 +188,70 @@ class SNMPTrapHandler:
             value = parts[1].rstrip()  # Remove trailing whitespace only
             return oid, value
         return None
+
+    def store_trap_in_redis(self, trap_data: dict) -> bool:
+        """Store trap data in Redis."""
+        if not self.redis_client:
+            return False
+
+        try:
+            # Generate unique trap ID
+            trap_id = f"{trap_data['timestamp']}_{trap_data['trap']['host']}_{id(trap_data)}"
+            trap_key = f"{self.trap_hash_prefix}{trap_id}"
+
+            # Use Redis pipeline for atomic operations
+            pipe = self.redis_client.pipeline()
+
+            # Store trap data as hash
+            pipe.hset(trap_key, mapping={
+                'data': json.dumps(trap_data, separators=(',', ':')),
+                'timestamp': trap_data['timestamp'],
+                'host': trap_data['trap']['host'],
+                'source_ip': trap_data['trap']['source_ip'],
+                'severity': trap_data['trap']['severity'],
+                'trap_oid': trap_data['trap']['oid'],
+                'trap_name': trap_data['trap']['name']
+            })
+
+            # Set expiration (30 days)
+            pipe.expire(trap_key, 30 * 24 * 60 * 60)
+
+            # Add to trap list (most recent first)
+            pipe.lpush(self.trap_list_key, trap_id)
+
+            # Trim list to max length
+            pipe.ltrim(self.trap_list_key, 0, self.max_list_length - 1)
+
+            # Update statistics
+            current_time = datetime.now(timezone.utc)
+            stats_data = {
+                'total_traps': 1,
+                'last_trap_time': trap_data['timestamp'],
+                f"severity_{trap_data['trap']['severity']}": 1,
+                f"host_{trap_data['trap']['host']}": 1
+            }
+
+            for key, value in stats_data.items():
+                pipe.hincrby(self.stats_key, key, value)
+
+            # Execute pipeline
+            pipe.execute()
+
+            return True
+
+        except (ConnectionError, TimeoutError) as e:
+            self.log_error(f"Redis connection error: {e}")
+            # Try to reconnect
+            self._initialize_redis()
+            return False
+
+        except RedisError as e:
+            self.log_error(f"Redis operation error: {e}")
+            return False
+
+        except Exception as e:
+            self.log_error(f"Unexpected error storing trap in Redis: {e}")
+            return False
 
     def process_trap(self) -> bool:
         """Process SNMP trap from stdin."""
@@ -202,18 +309,16 @@ class SNMPTrapHandler:
                             trap_name = re.sub(r'\.0$', '', trap_name)
                         elif oid in ["DISMAN-EVENT-MIB::sysUpTimeInstance", ".1.3.6.1.2.1.1.3.0"]:
                             uptime = value
-                        # elif oid in ["EAGLEXGDSR-MIB::eagleXgDsrAlarmSeverity", ".1.3.6.1.4.1.323.5.3.28.1.1.3.5.1.7"]:
-                        elif "eagleXgDsrAlarmSeverity" in oid:
+                        elif oid in ["EAGLEXGDSR-MIB::eagleXgDsrAlarmSeverity", ".1.3.6.1.4.1.323.5.3.28.1.1.3.5.1.7"]:
                             eagle_severity = value
-                            print(f"Eagle Sev: {value}")
 
             # Determine severity
             severity = self.get_trap_severity(trap_oid, eagle_severity)
 
-            # Create structured log entry
+            # Create structured trap data
             timestamp = datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
 
-            log_entry = {
+            trap_data = {
                 "timestamp": timestamp,
                 "level": "INFO",
                 "message": "SNMP trap received",
@@ -234,16 +339,11 @@ class SNMPTrapHandler:
                 }
             }
 
-            # Write to log file
-            with open(self.log_file, 'a', encoding='utf-8') as f:
-                json.dump(log_entry, f, ensure_ascii=False, separators=(',', ':'))
-                f.write('\n')
-
-            # Set proper permissions
-            try:
-                os.chmod(self.log_file, 0o644)
-            except OSError:
-                pass  # Ignore permission errors
+            # Try to store in Redis
+            if not self.store_trap_in_redis(trap_data):
+                # Fallback to file logging
+                self.fallback_to_file(trap_data)
+                self.log_error("Stored trap in fallback file due to Redis unavailability")
 
             # Send to syslog
             syslog_message = (
@@ -261,9 +361,6 @@ class SNMPTrapHandler:
     def run(self):
         """Main execution method."""
         try:
-            # Rotate log if needed
-            self.rotate_log_if_needed()
-
             # Process the trap
             if not self.process_trap():
                 self.log_error("Failed to process SNMP trap")

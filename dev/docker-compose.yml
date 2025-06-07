@@ -21,6 +21,33 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    container_name: snmp-redis
+    command: >
+      redis-server
+      --appendonly yes
+      --appendfsync everysec
+      --maxmemory ${REDIS_MAX_MEMORY:-512mb}
+      --maxmemory-policy allkeys-lru
+      --save 900 1
+      --save 300 10
+      --save 60 10000
+      ${REDIS_PASSWORD:+--requirepass $REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    networks:
+      - snmp-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
   snmptrapd:
     build:
       context: snmptrapd
@@ -36,10 +63,23 @@ services:
       - SNMP_USER=${SNMP_USER:-snmpv3user}
       - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
       - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
+      # Redis configuration for trap handler
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=${REDIS_DB:-0}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_SOCKET_TIMEOUT=${REDIS_SOCKET_TIMEOUT:-5}
+      - REDIS_TRAP_LIST_KEY=${REDIS_TRAP_LIST_KEY:-snmp:traps}
+      - REDIS_TRAP_HASH_PREFIX=${REDIS_TRAP_HASH_PREFIX:-snmp:trap:}
+      - REDIS_STATS_KEY=${REDIS_STATS_KEY:-snmp:stats}
+      - REDIS_MAX_LIST_LENGTH=${REDIS_MAX_LIST_LENGTH:-10000}
     networks:
       - snmp-network
     depends_on:
-      - trap-processor
+      redis:
+        condition: service_healthy
+      trap-processor:
+        condition: service_started
     healthcheck:
       test: ["CMD", "pgrep", "snmptrapd"]
       interval: 30s
@@ -53,19 +93,33 @@ services:
     volumes:
       - ./logs:/app/logs:rw
     environment:
+      # PostgreSQL configuration
       - DB_HOST=snmp-psql
       - DB_PORT=5432
       - DB_NAME=${POSTGRES_DB:-snmptraps}
       - DB_USER=${POSTGRES_USER:-snmpuser}
       - DB_PASSWORD=${POSTGRES_PASSWORD:-snmppass}
+      # Redis configuration
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=${REDIS_DB:-0}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_SOCKET_TIMEOUT=${REDIS_SOCKET_TIMEOUT:-5}
+      - REDIS_TRAP_LIST_KEY=${REDIS_TRAP_LIST_KEY:-snmp:traps}
+      - REDIS_TRAP_HASH_PREFIX=${REDIS_TRAP_HASH_PREFIX:-snmp:trap:}
+      - REDIS_STATS_KEY=${REDIS_STATS_KEY:-snmp:stats}
+      # General configuration
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - PROCESSING_MODE=${PROCESSING_MODE:-hybrid}  # redis, postgres, or hybrid
     networks:
       - snmp-network
     depends_on:
       snmp-psql:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD", "python", "-c", "import psycopg2; psycopg2.connect(host='postgres', database='${POSTGRES_DB:-snmptraps}', user='${POSTGRES_USER:-snmpuser}', password='${POSTGRES_PASSWORD:-snmppass}')"]
+      test: ["CMD", "python", "-c", "import psycopg2; psycopg2.connect(host='snmp-psql', database='${POSTGRES_DB:-snmptraps}', user='${POSTGRES_USER:-snmpuser}', password='${POSTGRES_PASSWORD:-snmppass}')"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -96,12 +150,18 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
       - GF_USERS_ALLOW_SIGN_UP=false
+      # PostgreSQL datasource configuration
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_PORT=${POSTGRES_PORT}
-      - GF_INSTALL_PLUGINS=
+      - POSTGRES_HOST=snmp-psql
+      - POSTGRES_PORT=5432
+      # Redis datasource configuration
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_DB=${REDIS_DB:-0}
+      - GF_INSTALL_PLUGINS=redis-datasource,grafana-redis-app
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
@@ -111,8 +171,33 @@ services:
     depends_on:
       snmp-psql:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Optional: Redis Commander for Redis management UI
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: snmp-redis-commander
+    ports:
+      - "${REDIS_COMMANDER_PORT:-8081}:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379:${REDIS_DB:-0}:${REDIS_PASSWORD}
+      - HTTP_USER=${REDIS_COMMANDER_USER:-admin}
+      - HTTP_PASSWORD=${REDIS_COMMANDER_PASSWORD:-admin123}
+    networks:
+      - snmp-network
+    depends_on:
+      redis:
+        condition: service_healthy
+    profiles:
+      - management
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8081/ || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -120,6 +205,7 @@ services:
 volumes:
   postgres_data:
   grafana_data:
+  redis_data:
 
 networks:
   snmp-network:
