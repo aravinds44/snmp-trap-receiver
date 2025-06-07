@@ -1,5 +1,4 @@
 psycopg2-binary==2.9.7
 sqlalchemy==2.0.21
 python-decouple==3.8
-watchdog==3.0.0
-redis==4.6.0
+confluent-kafka==2.10.0

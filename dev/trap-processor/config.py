@@ -9,13 +9,9 @@ class Config:
     DB_USER = config('DB_USER', default='snmpuser')
     DB_PASSWORD = config('DB_PASSWORD', default='snmppass')
 
-    REDIS_HOST = config('REDIS_HOST', default='localhost')
-    REDIS_PORT = config('REDIS_PORT', default=6379, cast=int)
-    REDIS_DB = config('REDIS_DB', default=0, cast=int)
-    REDIS_PASSWORD = config('REDIS_PASSWORD', default=None)
-    REDIS_SOCKET_TIMEOUT = config('REDIS_SOCKET_TIMEOUT', default=5, cast=int)
-    REDIS_TRAP_LIST_KEY = config('REDIS_TRAP_LIST_KEY', default='snmp:traps')
-    REDIS_TRAP_HASH_PREFIX = config('REDIS_TRAP_HASH_PREFIX', default='snmp:trap:')
+    KAFKA_BROKER = os.getenv('KAFKA_BROKER', 'kafka:9092')
+    KAFKA_TOPIC = os.getenv('KAFKA_TOPIC', 'snmp_traps')
+    KAFKA_CONSUMER_GROUP = os.getenv('KAFKA_CONSUMER_GROUP', 'trap_processor_group')
 
     # Application configuration
     LOG_LEVEL = config('LOG_LEVEL', default='INFO')
