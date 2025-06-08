@@ -1,29 +1,18 @@
--- Initialize SNMP traps database schema
-
--- Create database if it doesn't exist (handled by docker-entrypoint)
--- CREATE DATABASE IF NOT EXISTS snmptraps;
-
--- ALTER USER snmpuser PASSWORD 'snmppass';
--- Create schema for SNMP traps
 CREATE SCHEMA IF NOT EXISTS snmp;
 
--- Create main traps table
 CREATE TABLE IF NOT EXISTS snmp_traps (
-                                          id BIGSERIAL PRIMARY KEY,
-                                          timestamp TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    id BIGSERIAL PRIMARY KEY,
+    timestamp TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     hostname VARCHAR(255),
     source_ip INET NOT NULL,
     trap_oid VARCHAR(255) NOT NULL,
     trap_name VARCHAR(255),
     variable_bindings JSONB,
     raw_data JSONB,
-
-    -- Flattened fields for easier querying
-    src_node VARCHAR(255),
+    alarm_server VARCHAR(255),
+    alarm_instance VARCHAR(255),
     alarm_number VARCHAR(255),
     alarm_text TEXT,
-
-    -- Existing metadata
     severity VARCHAR(50) DEFAULT 'info',
     uptime VARCHAR(50),
     transport VARCHAR(255),
@@ -32,7 +21,6 @@ CREATE TABLE IF NOT EXISTS snmp_traps (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
     );
 
--- Create indexes for better query performance
 CREATE INDEX IF NOT EXISTS idx_snmp_traps_timestamp ON snmp_traps(timestamp);
 CREATE INDEX IF NOT EXISTS idx_snmp_traps_source_ip ON snmp_traps(source_ip);
 CREATE INDEX IF NOT EXISTS idx_snmp_traps_trap_oid ON snmp_traps(trap_oid);
@@ -42,11 +30,9 @@ CREATE INDEX IF NOT EXISTS idx_snmp_traps_acknowledged ON snmp_traps(acknowledge
 CREATE INDEX IF NOT EXISTS idx_snmp_traps_uptime ON snmp_traps(uptime);
 CREATE INDEX IF NOT EXISTS idx_snmp_traps_transport ON snmp_traps(transport);
 
--- Create GIN index for JSONB columns for better JSON query performance
 CREATE INDEX IF NOT EXISTS idx_snmp_traps_variable_bindings_gin ON snmp_traps USING GIN(variable_bindings);
 CREATE INDEX IF NOT EXISTS idx_snmp_traps_raw_data_gin ON snmp_traps USING GIN(raw_data);
 
--- Create trap statistics table
 CREATE TABLE IF NOT EXISTS snmp_trap_stats (
                                                id SERIAL PRIMARY KEY,
                                                date DATE NOT NULL DEFAULT CURRENT_DATE,
@@ -61,12 +47,11 @@ CREATE TABLE IF NOT EXISTS snmp_trap_stats (
     );
 
 
--- Create index for trap statistics
 CREATE INDEX IF NOT EXISTS idx_snmp_trap_stats_date ON snmp_trap_stats(date);
 CREATE INDEX IF NOT EXISTS idx_snmp_trap_stats_trap_oid ON snmp_trap_stats(trap_oid);
 CREATE INDEX IF NOT EXISTS idx_snmp_trap_stats_source_ip ON snmp_trap_stats(source_ip);
 
--- Create function to update trap statistics
+
 CREATE OR REPLACE FUNCTION update_trap_stats()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -83,13 +68,11 @@ RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
--- Create trigger to automatically update statistics
 CREATE TRIGGER trigger_update_trap_stats
     AFTER INSERT ON snmp_traps
     FOR EACH ROW
     EXECUTE FUNCTION update_trap_stats();
 
--- Create function to update the updated_at timestamp
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -98,18 +81,15 @@ RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
--- Create trigger to automatically update updated_at
 CREATE TRIGGER trigger_update_snmp_traps_updated_at
     BEFORE UPDATE ON snmp_traps
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
--- Grant permissions (adjust as needed for production)
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO snmpuser;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO snmpuser;
 GRANT ALL PRIVILEGES ON SCHEMA snmp TO snmpuser;
 
--- Create views for common queries
 CREATE OR REPLACE VIEW recent_traps AS
 SELECT
     id,

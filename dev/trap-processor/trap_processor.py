@@ -180,10 +180,11 @@ class TrapProcessor:
                     break
 
             # Initialize flattened values
-            src_node = None
+            alarm_server = None
             alarm_number = None
             severity = 'info'
             alarm_text = None
+            alarm_instance = None
 
             # Extract variable bindings
             varbinds = []
@@ -204,8 +205,11 @@ class TrapProcessor:
                     alarm_number = value
                 elif 'alarmtext' in resolved_lower:
                     alarm_text = value
-                elif 'srcnode' in resolved_lower:
-                    src_node = value
+                elif 'dsrserverhostname' in resolved_lower:
+                    alarm_server = value
+                elif 'dsralarminstance' in resolved_lower:
+                    alarm_instance = value
+
 
                 varbinds.append({
                     'oid': oid_part,
@@ -224,7 +228,8 @@ class TrapProcessor:
                 'transport': transport,
                 'variable_bindings': varbinds,
                 'raw_data': trap_json,
-                'src_node': src_node,
+                'alarm_server': alarm_server,
+                'alarm_instance':alarm_instance,
                 'alarm_number': alarm_number,
                 'alarm_text': alarm_text
             }
@@ -241,12 +246,12 @@ class TrapProcessor:
                     INSERT INTO snmp_traps (
                         timestamp, hostname, source_ip, trap_oid, trap_name,
                         severity, uptime, transport,
-                        src_node, alarm_number, alarm_text,
+                        alarm_server, alarm_instance, alarm_number, alarm_text,
                         variable_bindings, raw_data
                     ) VALUES (
                         :timestamp, :hostname, :source_ip, :trap_oid, :trap_name,
                         :severity, :uptime, :transport,
-                        :src_node, :alarm_number, :alarm_text,
+                        :alarm_server, :alarm_instance, :alarm_number, :alarm_text,
                         :variable_bindings, :raw_data
                     )
                 """)
@@ -259,7 +264,8 @@ class TrapProcessor:
                     'severity': trap_data['severity'],
                     'uptime': trap_data['uptime'],
                     'transport': trap_data['transport'],
-                    'src_node': trap_data.get('src_node'),
+                    'alarm_server': trap_data.get('alarm_server'),
+                    'alarm_instance': trap_data.get('alarm_instance'),
                     'alarm_number': trap_data.get('alarm_number'),
                     'alarm_text': trap_data.get('alarm_text'),
                     'variable_bindings': json.dumps(trap_data['variable_bindings']),

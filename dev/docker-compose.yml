@@ -88,7 +88,7 @@ services:
     ports:
       - "1162:162/udp"
     volumes:
-      - ./logs:/var/log/snmp:rw
+      - ./logs:/var/log/snmp:z
       - ./mibs:/custom-mibs:ro
     environment:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
@@ -118,7 +118,7 @@ services:
     ports:
       - "1262:162/udp"
     volumes:
-      - ./logs:/var/log/snmp:rw
+      - ./logs:/var/log/snmp:z
       - ./mibs:/custom-mibs:ro
     environment:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
@@ -147,7 +147,7 @@ services:
     ports:
       - "1362:162/udp"
     volumes:
-      - ./logs:/var/log/snmp:rw
+      - ./logs:/var/log/snmp:z
       - ./mibs:/custom-mibs:ro
     environment:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
@@ -176,7 +176,7 @@ services:
     ports:
       - "1462:162/udp"
     volumes:
-      - ./logs:/var/log/snmp:rw
+      - ./logs:/var/log/snmp:z
       - ./mibs:/custom-mibs:ro
     environment:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
@@ -205,7 +205,7 @@ services:
     ports:
       - "1562:162/udp"
     volumes:
-      - ./logs:/var/log/snmp:rw
+      - ./logs:/var/log/snmp:z
       - ./mibs:/custom-mibs:ro
     environment:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
@@ -235,7 +235,7 @@ services:
     ports:
       - "1662:162/udp"
     volumes:
-      - ./logs:/var/log/snmp:rw
+      - ./logs:/var/log/snmp:z
       - ./mibs:/custom-mibs:ro
     environment:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
@@ -265,7 +265,7 @@ services:
     ports:
       - "1762:162/udp"
     volumes:
-      - ./logs:/var/log/snmp:rw
+      - ./logs:/var/log/snmp:z
       - ./mibs:/custom-mibs:ro
     environment:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
@@ -296,7 +296,7 @@ services:
     ports:
       - "1862:162/udp"
     volumes:
-      - ./logs:/var/log/snmp:rw
+      - ./logs:/var/log/snmp:z
       - ./mibs:/custom-mibs:ro
     environment:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
@@ -324,7 +324,7 @@ services:
       context: trap-processor
     container_name: snmp-processor
     volumes:
-      - ./logs:/app/logs:rw
+      - ./logs:/app/logs:z
     environment:
       # PostgreSQL configuration
       - DB_HOST=snmp-psql

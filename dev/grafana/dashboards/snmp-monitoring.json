@@ -708,7 +708,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n  timestamp,\n  src_node,\n  trap_name,\n  severity,\n  alarm_number,\n  alarm_text FROM snmp_traps \nORDER BY timestamp DESC \nLIMIT 100",
+          "rawSql": "SELECT \n  timestamp,\n  alarm_server,\n  alarm_instance,\n  trap_name,\n  severity,\n  alarm_number,\n  alarm_text FROM snmp_traps \nORDER BY timestamp DESC \nLIMIT 100",
           "refId": "A",
           "sql": {
             "columns": [
