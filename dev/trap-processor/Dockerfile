@@ -30,4 +30,3 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 
 # Start the trap processor
 CMD ["python", "trap_processor.py"]
-#CMD ["tail", "-f", "/dev/null"]

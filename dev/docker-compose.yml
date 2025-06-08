@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-snmptraps}
       POSTGRES_USER: ${POSTGRES_USER:-snmpuser}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-snmppass}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-snmppass123}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
@@ -96,6 +96,9 @@ services:
       - SNMP_USER=${SNMP_USER:-snmpv3user}
       - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
       - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
+      - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
+      - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
       - snmp-network
     depends_on:
@@ -123,6 +126,9 @@ services:
       - SNMP_USER=${SNMP_USER:-snmpv3user}
       - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
       - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
+      - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
+      - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
       - snmp-network
     depends_on:
@@ -149,6 +155,9 @@ services:
       - SNMP_USER=${SNMP_USER:-snmpv3user}
       - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
       - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
+      - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
+      - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
       - snmp-network
     depends_on:
@@ -175,6 +184,9 @@ services:
       - SNMP_USER=${SNMP_USER:-snmpv3user}
       - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
       - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
+      - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
+      - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
       - snmp-network
     depends_on:
@@ -201,6 +213,9 @@ services:
       - SNMP_USER=${SNMP_USER:-snmpv3user}
       - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
       - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
+      - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
+      - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
       - snmp-network
     depends_on:
@@ -228,6 +243,9 @@ services:
       - SNMP_USER=${SNMP_USER:-snmpv3user}
       - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
       - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
+      - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
+      - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
       - snmp-network
     depends_on:
@@ -255,6 +273,9 @@ services:
       - SNMP_USER=${SNMP_USER:-snmpv3user}
       - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
       - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
+      - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
+      - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
       - snmp-network
     depends_on:
@@ -283,6 +304,9 @@ services:
       - SNMP_USER=${SNMP_USER:-snmpv3user}
       - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
       - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
+      - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
+      - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
       - snmp-network
     depends_on:
@@ -309,6 +333,8 @@ services:
       - DB_USER=${POSTGRES_USER:-snmpuser}
       - DB_PASSWORD=${POSTGRES_PASSWORD:-snmppass}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
+      - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
       - snmp-network
     depends_on:

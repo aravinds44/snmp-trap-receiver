@@ -4,9 +4,10 @@ import sys
 import json
 from kafka import KafkaProducer
 from datetime import datetime, timezone
+from decouple import config
 
-KAFKA_BROKER = "kafka:9092"
-KAFKA_TOPIC = "snmp_traps"
+KAFKA_BROKER = config('KAFKA_BROKER')
+KAFKA_TOPIC = config('KAFKA_TOPIC')
 
 def read_trap():
     """Reads SNMP trap lines from stdin and structures basic JSON"""

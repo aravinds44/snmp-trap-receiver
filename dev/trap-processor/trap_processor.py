@@ -11,6 +11,7 @@ from confluent_kafka import Consumer, KafkaError, KafkaException
 from confluent_kafka.admin import AdminClient, NewTopic
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
+from config import Config
 
 
 def _setup_logging():
@@ -28,8 +29,9 @@ def _setup_logging():
 class TrapProcessor:
     def __init__(self):
         self.logger = _setup_logging()
+        self.config = Config()
         self.kafka_config = {
-            'bootstrap.servers': 'kafka:9092',
+            'bootstrap.servers': self.config.KAFKA_BROKER,
             'group.id': 'snmp-trap-processor',
             'auto.offset.reset': 'earliest',
             'enable.auto.commit': False,
@@ -40,11 +42,11 @@ class TrapProcessor:
             'reconnect.backoff.max.ms': 10000
         }
         self.db_config = {
-            'host': 'snmp-psql',
-            'port': 5432,
-            'database': 'snmptraps',
-            'user': 'snmpuser',
-            'password': 'snmppass123'
+            'host': self.config.DB_HOST,
+            'port': self.config.DB_PORT,
+            'database': self.config.DB_NAME,
+            'user': self.config.DB_USER,
+            'password': self.config.DB_PASSWORD
         }
         self.consumer = None
         self.db_engine = None
@@ -74,7 +76,7 @@ class TrapProcessor:
 
                 # Now initialize consumer
                 self.consumer = Consumer(self.kafka_config)
-                self.consumer.subscribe(['snmp_traps'])
+                self.consumer.subscribe([self.config.KAFKA_TOPIC])
                 self.logger.info("Kafka consumer initialized and subscribed to 'snmp_traps'")
                 return True
 
@@ -304,6 +306,7 @@ class TrapProcessor:
             if self.db_engine:
                 self.db_engine.dispose()
             self.logger.info("Processor shutdown complete")
+
 
 if __name__ == '__main__':
     try:
