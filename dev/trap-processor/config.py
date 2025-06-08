@@ -3,11 +3,11 @@ from decouple import config
 
 class Config:
     # Database configuration
-    DB_HOST = config('DB_HOST', default='localhost')
+    DB_HOST = config('DB_HOST', default='snmp-psql')
     DB_PORT = config('DB_PORT', default=5432, cast=int)
     DB_NAME = config('DB_NAME', default='snmptraps')
     DB_USER = config('DB_USER', default='snmpuser')
-    DB_PASSWORD = config('DB_PASSWORD', default='snmppass')
+    DB_PASSWORD = config('DB_PASSWORD', default='snmppass123')
 
     KAFKA_BROKER = os.getenv('KAFKA_BROKER', 'kafka:9092')
     KAFKA_TOPIC = os.getenv('KAFKA_TOPIC', 'snmp_traps')
