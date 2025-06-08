@@ -17,9 +17,16 @@ CREATE TABLE IF NOT EXISTS snmp_traps (
     trap_name VARCHAR(255),
     variable_bindings JSONB,
     raw_data JSONB,
+
+    -- Flattened fields for easier querying
+    src_node VARCHAR(255),
+    alarm_number VARCHAR(255),
+    alarm_text TEXT,
+
+    -- Existing metadata
     severity VARCHAR(50) DEFAULT 'info',
-    uptime VARCHAR(50),  -- Added for new JSON format
-    transport VARCHAR(255),  -- Added for new JSON format
+    uptime VARCHAR(50),
+    transport VARCHAR(255),
     acknowledged BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()

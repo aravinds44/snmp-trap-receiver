@@ -145,17 +145,17 @@ class TrapProcessor:
                 time.sleep(retry_delay * (attempt + 1))
 
     def _parse_trap(self, trap_json: Dict) -> Optional[Dict]:
-        """Parse the raw trap JSON into structured data for database insertion"""
+        """Parse the raw trap JSON into structured and flattened data for database insertion."""
         try:
             # Extract source IP from transport string
             transport = trap_json.get('transport', '')
-            source_ip = '127.0.0.1'  # default
+            source_ip = '127.0.0.1'
             if '->' in transport:
                 source_part = transport.split('->')[0]
                 if '[' in source_part and ']' in source_part:
                     source_ip = source_part.split('[')[1].split(']')[0].split(':')[0]
 
-            # Extract trap OID from oids list
+            # Extract trap OID and name
             trap_oid = ''
             trap_name = ''
             for oid in trap_json.get('oids', []):
@@ -170,32 +170,46 @@ class TrapProcessor:
             except (KeyError, ValueError):
                 timestamp = datetime.now(timezone.utc)
 
-            # Extract severity if present in oids
-            severity = 'info'
-            for oid in trap_json.get('oids', []):
-                if 'Severity' in oid:
-                    severity = oid.split()[-1].lower()
-                    break
-
-            # Extract uptime if present
+            # Extract uptime
             uptime = ''
             for oid in trap_json.get('oids', []):
                 if 'sysUpTime' in oid:
                     uptime = oid.split()[-1]
                     break
 
-            # Prepare variable bindings
+            # Initialize flattened values
+            src_node = None
+            alarm_number = None
+            severity = 'info'
+            alarm_text = None
+
+            # Extract variable bindings
             varbinds = []
             for oid in trap_json.get('oids', []):
-                if 'snmpTrapOID.0' not in oid and 'sysUpTime' not in oid:
-                    parts = oid.split()
-                    oid_part = parts[0]
-                    value = ' '.join(parts[1:]) if len(parts) > 1 else ''
-                    varbinds.append({
-                        'oid': oid_part,
-                        'value': value,
-                        'resolved_name': oid_part.split('::')[-1] if '::' in oid_part else oid_part
-                    })
+                if 'snmpTrapOID.0' in oid or 'sysUpTime' in oid:
+                    continue
+
+                parts = oid.split()
+                oid_part = parts[0]
+                value = ' '.join(parts[1:]) if len(parts) > 1 else ''
+                resolved_name = oid_part.split('::')[-1] if '::' in oid_part else oid_part
+                resolved_lower = resolved_name.lower()
+
+                # Substring match to populate flattened fields
+                if 'alarmseverity' in resolved_lower:
+                    severity = value.lower()
+                elif 'alarmnumber' in resolved_lower:
+                    alarm_number = value
+                elif 'alarmtext' in resolved_lower:
+                    alarm_text = value
+                elif 'srcnode' in resolved_lower:
+                    src_node = value
+
+                varbinds.append({
+                    'oid': oid_part,
+                    'value': value,
+                    'resolved_name': resolved_name
+                })
 
             return {
                 'timestamp': timestamp,
@@ -207,8 +221,12 @@ class TrapProcessor:
                 'uptime': uptime,
                 'transport': transport,
                 'variable_bindings': varbinds,
-                'raw_data': trap_json
+                'raw_data': trap_json,
+                'src_node': src_node,
+                'alarm_number': alarm_number,
+                'alarm_text': alarm_text
             }
+
         except Exception as e:
             self.logger.error(f"Error parsing trap: {e}")
             return None
@@ -220,10 +238,14 @@ class TrapProcessor:
                 query = text("""
                     INSERT INTO snmp_traps (
                         timestamp, hostname, source_ip, trap_oid, trap_name,
-                        severity, uptime, transport, variable_bindings, raw_data
+                        severity, uptime, transport,
+                        src_node, alarm_number, alarm_text,
+                        variable_bindings, raw_data
                     ) VALUES (
                         :timestamp, :hostname, :source_ip, :trap_oid, :trap_name,
-                        :severity, :uptime, :transport, :variable_bindings, :raw_data
+                        :severity, :uptime, :transport,
+                        :src_node, :alarm_number, :alarm_text,
+                        :variable_bindings, :raw_data
                     )
                 """)
                 conn.execute(query, {
@@ -235,10 +257,14 @@ class TrapProcessor:
                     'severity': trap_data['severity'],
                     'uptime': trap_data['uptime'],
                     'transport': trap_data['transport'],
+                    'src_node': trap_data.get('src_node'),
+                    'alarm_number': trap_data.get('alarm_number'),
+                    'alarm_text': trap_data.get('alarm_text'),
                     'variable_bindings': json.dumps(trap_data['variable_bindings']),
                     'raw_data': json.dumps(trap_data['raw_data'])
                 })
                 self.logger.info(f"Stored trap: {trap_data['trap_name']} from {trap_data['source_ip']}")
+
         except SQLAlchemyError as e:
             self.logger.error(f"Database error storing trap: {e}")
             # Fallback to file if database fails
