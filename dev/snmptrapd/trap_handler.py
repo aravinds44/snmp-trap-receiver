@@ -34,10 +34,11 @@ def main():
     try:
         producer = KafkaProducer(
             bootstrap_servers=KAFKA_BROKER,
-            value_serializer=lambda v: json.dumps(v).encode("utf-8")
+            value_serializer=lambda v: json.dumps(v).encode("utf-8"),
+            batch_size=32*1024,
+            linger_ms=50
         )
         producer.send(KAFKA_TOPIC, trap)
-        producer.flush()
     except Exception as e:
         # Log to fallback file
         with open("/var/log/snmp/kafka_trap_fallback.log", "a") as f:

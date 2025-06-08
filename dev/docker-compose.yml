@@ -62,12 +62,31 @@ services:
       timeout: 10s
       retries: 5
 
-  snmptrapd:
-    build:
-      context: snmptrapd
-    container_name: snmp-trapd
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: snmp-nginx-lb
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
       - "162:162/udp"
+    networks:
+      - snmp-network
+    depends_on:
+      snmptrapd1:
+        condition: service_started
+      snmptrapd2:
+        condition: service_started
+      snmptrapd3:
+        condition: service_started
+
+
+  snmptrapd1:
+    build:
+      context: snmptrapd
+    container_name: snmp-trapd-1
+    ports:
+      - "1162:162/udp"
     volumes:
       - ./logs:/var/log/snmp:rw
       - ./mibs:/custom-mibs:ro
@@ -84,6 +103,85 @@ services:
         condition: service_started
     healthcheck:
       test: ["CMD", "pgrep", "snmptrapd"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+
+  snmptrapd2:
+    build:
+      context: snmptrapd
+    container_name: snmp-trapd-2
+    ports:
+      - "1262:162/udp"
+    volumes:
+      - ./logs:/var/log/snmp:rw
+      - ./mibs:/custom-mibs:ro
+    environment:
+      - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
+      - MIBS=+ALL
+      - SNMP_USER=${SNMP_USER:-snmpv3user}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
+    networks:
+      - snmp-network
+    depends_on:
+      trap-processor:
+        condition: service_started
+    healthcheck:
+      test: [ "CMD", "pgrep", "snmptrapd" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  snmptrapd3:
+    build:
+      context: snmptrapd
+    container_name: snmp-trapd-3
+    ports:
+      - "1362:162/udp"
+    volumes:
+      - ./logs:/var/log/snmp:rw
+      - ./mibs:/custom-mibs:ro
+    environment:
+      - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
+      - MIBS=+ALL
+      - SNMP_USER=${SNMP_USER:-snmpv3user}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
+    networks:
+      - snmp-network
+    depends_on:
+      trap-processor:
+        condition: service_started
+    healthcheck:
+      test: [ "CMD", "pgrep", "snmptrapd" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  snmptrapd4:
+    build:
+      context: snmptrapd
+    container_name: snmp-trapd-4
+    ports:
+      - "1462:162/udp"
+    volumes:
+      - ./logs:/var/log/snmp:rw
+      - ./mibs:/custom-mibs:ro
+    environment:
+      - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
+      - MIBS=+ALL
+      - SNMP_USER=${SNMP_USER:-snmpv3user}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
+    networks:
+      - snmp-network
+    depends_on:
+      trap-processor:
+        condition: service_started
+    healthcheck:
+      test: [ "CMD", "pgrep", "snmptrapd" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -127,7 +225,7 @@ services:
     networks:
       - snmp-network
     depends_on:
-      - snmptrapd
+      - snmptrapd1
     profiles:
       - testing
 
