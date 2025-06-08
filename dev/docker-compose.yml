@@ -75,10 +75,10 @@ services:
     depends_on:
       snmptrapd1:
         condition: service_started
-      snmptrapd2:
-        condition: service_started
-      snmptrapd3:
-        condition: service_started
+#      snmptrapd2:
+#        condition: service_started
+#      snmptrapd3:
+#        condition: service_started
 
 
   snmptrapd1:
@@ -93,10 +93,10 @@ services:
     environment:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
       - MIBS=+ALL
-      - SNMP_USER=${SNMP_USER:-snmpv3user}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
-      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
+      - SNMP_USER=${SNMP_USER:-snmpuser}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Oracle@12}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Oracle@12}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x80001f880438303030303134333063}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
@@ -123,10 +123,10 @@ services:
     environment:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
       - MIBS=+ALL
-      - SNMP_USER=${SNMP_USER:-snmpv3user}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
-      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
+      - SNMP_USER=${SNMP_USER:-snmpuser}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Oracle@12}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Oracle@12}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x80001f880438303030303134333063}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
@@ -152,10 +152,10 @@ services:
     environment:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
       - MIBS=+ALL
-      - SNMP_USER=${SNMP_USER:-snmpv3user}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
-      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
+      - SNMP_USER=${SNMP_USER:-snmpuser}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Oracle@12}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Oracle@12}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x80001f880438303030303134333063}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
@@ -181,10 +181,10 @@ services:
     environment:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
       - MIBS=+ALL
-      - SNMP_USER=${SNMP_USER:-snmpv3user}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
-      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
+      - SNMP_USER=${SNMP_USER:-snmpuser}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Oracle@12}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Oracle@12}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x80001f880438303030303134333063}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
@@ -210,10 +210,10 @@ services:
     environment:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
       - MIBS=+ALL
-      - SNMP_USER=${SNMP_USER:-snmpv3user}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
-      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
+      - SNMP_USER=${SNMP_USER:-snmpuser}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Oracle@12}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Oracle@12}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x80001f880438303030303134333063}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
@@ -240,10 +240,10 @@ services:
     environment:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
       - MIBS=+ALL
-      - SNMP_USER=${SNMP_USER:-snmpv3user}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
-      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
+      - SNMP_USER=${SNMP_USER:-snmpuser}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Oracle@12}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Oracle@12}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x80001f880438303030303134333063}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
@@ -270,10 +270,10 @@ services:
     environment:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
       - MIBS=+ALL
-      - SNMP_USER=${SNMP_USER:-snmpv3user}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
-      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
+      - SNMP_USER=${SNMP_USER:-snmpuser}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Oracle@12}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Oracle@12}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x80001f880438303030303134333063}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
@@ -301,10 +301,10 @@ services:
     environment:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
       - MIBS=+ALL
-      - SNMP_USER=${SNMP_USER:-snmpv3user}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
-      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
+      - SNMP_USER=${SNMP_USER:-snmpuser}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Oracle@12}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Oracle@12}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x80001f880438303030303134333063}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
@@ -331,7 +331,7 @@ services:
       - DB_PORT=5432
       - DB_NAME=${POSTGRES_DB:-snmptraps}
       - DB_USER=${POSTGRES_USER:-snmpuser}
-      - DB_PASSWORD=${POSTGRES_PASSWORD:-snmppass}
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-snmppass123}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
@@ -346,36 +346,18 @@ services:
       timeout: 10s
       retries: 3
 
-  trap-sender:
-    build:
-      context: trap-sender
-    container_name: snmp-sender
-    volumes:
-      - ./mibs:/custom-mibs:ro
-    environment:
-      - SNMP_USER=${SNMP_USER:-snmpv3user}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-authpassword123}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-privpassword123}
-      - TRAPD_HOST=snmptrapd
-    networks:
-      - snmp-network
-    depends_on:
-      - snmptrapd1
-    profiles:
-      - testing
-
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:12.0.1
     container_name: snmp-grafana
     ports:
       - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin123}
       - GF_USERS_ALLOW_SIGN_UP=false
       # PostgreSQL datasource configuration
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB:-snmptraps}
+      - POSTGRES_USER=${POSTGRES_USER:-snmpuser}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-snmppass123}
       - POSTGRES_HOST=snmp-psql
       - POSTGRES_PORT=5432
     volumes:
