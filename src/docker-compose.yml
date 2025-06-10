@@ -94,9 +94,9 @@ services:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
       - MIBS=+ALL
       - SNMP_USER=${SNMP_USER:-snmpuser}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Oracle@12}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Oracle@12}
-      - SNMP_ENGINE=${SNMP_ENGINE:-0x80001f880438303030303134333063}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Password@12}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Password@12}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
@@ -124,9 +124,9 @@ services:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
       - MIBS=+ALL
       - SNMP_USER=${SNMP_USER:-snmpuser}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Oracle@12}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Oracle@12}
-      - SNMP_ENGINE=${SNMP_ENGINE:-0x80001f880438303030303134333063}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Password@12}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Password@12}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
@@ -153,9 +153,9 @@ services:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
       - MIBS=+ALL
       - SNMP_USER=${SNMP_USER:-snmpuser}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Oracle@12}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Oracle@12}
-      - SNMP_ENGINE=${SNMP_ENGINE:-0x80001f880438303030303134333063}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Password@12}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Password@12}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
@@ -182,9 +182,9 @@ services:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
       - MIBS=+ALL
       - SNMP_USER=${SNMP_USER:-snmpuser}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Oracle@12}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Oracle@12}
-      - SNMP_ENGINE=${SNMP_ENGINE:-0x80001f880438303030303134333063}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Password@12}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Password@12}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
@@ -211,9 +211,9 @@ services:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
       - MIBS=+ALL
       - SNMP_USER=${SNMP_USER:-snmpuser}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Oracle@12}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Oracle@12}
-      - SNMP_ENGINE=${SNMP_ENGINE:-0x80001f880438303030303134333063}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Password@12}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Password@12}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
@@ -241,9 +241,9 @@ services:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
       - MIBS=+ALL
       - SNMP_USER=${SNMP_USER:-snmpuser}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Oracle@12}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Oracle@12}
-      - SNMP_ENGINE=${SNMP_ENGINE:-0x80001f880438303030303134333063}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Password@12}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Password@12}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
@@ -271,9 +271,9 @@ services:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
       - MIBS=+ALL
       - SNMP_USER=${SNMP_USER:-snmpuser}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Oracle@12}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Oracle@12}
-      - SNMP_ENGINE=${SNMP_ENGINE:-0x80001f880438303030303134333063}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Password@12}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Password@12}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
@@ -302,9 +302,9 @@ services:
       - MIBDIRS=/custom-mibs:/usr/share/snmp/mibs
       - MIBS=+ALL
       - SNMP_USER=${SNMP_USER:-snmpuser}
-      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Oracle@12}
-      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Oracle@12}
-      - SNMP_ENGINE=${SNMP_ENGINE:-0x80001f880438303030303134333063}
+      - SNMP_AUTH_PASS=${SNMP_AUTH_PASS:-Password@12}
+      - SNMP_PRIV_PASS=${SNMP_PRIV_PASS:-Password@12}
+      - SNMP_ENGINE=${SNMP_ENGINE:-0x8000000001020304}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
