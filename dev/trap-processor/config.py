@@ -12,6 +12,7 @@ class Config:
     KAFKA_BROKER = os.getenv('KAFKA_BROKER', 'kafka:9092')
     KAFKA_TOPIC = os.getenv('KAFKA_TOPIC', 'snmp_traps')
     KAFKA_CONSUMER_GROUP = os.getenv('KAFKA_CONSUMER_GROUP', 'trap_processor_group')
+    KAFKA_PARTITIONS = config('KAFKA_PARTITIONS', default=8, cast=int)
 
     # Application configuration
     LOG_LEVEL = config('LOG_LEVEL', default='INFO')

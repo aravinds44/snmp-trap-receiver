@@ -9,8 +9,10 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.idea/dataSources" />
-      <excludeFolder url="file://$MODULE_DIR$/dev/prod" />
-      <excludeFolder url="file://$MODULE_DIR$/prod/tars" />
+      <excludeFolder url="file://$MODULE_DIR$/targets/prod.2.0.1" />
+      <excludeFolder url="file://$MODULE_DIR$/targets/prod/images" />
+      <excludeFolder url="file://$MODULE_DIR$/targets/prod/logs" />
+      <excludeFolder url="file://$MODULE_DIR$/targets/prod/tars" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />

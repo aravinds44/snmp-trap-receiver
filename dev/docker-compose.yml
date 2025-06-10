@@ -334,17 +334,14 @@ services:
       - DB_PASSWORD=${POSTGRES_PASSWORD:-snmppass123}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
       - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
+      - KAFKA_PARTITIONS=${KAFKA_PARTITIONS:-8}
       - KAFKA_TOPIC=${KAFKA_TOPIC:-snmp_traps}
     networks:
       - snmp-network
     depends_on:
       snmp-psql:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "python", "-c", "import psycopg2; psycopg2.connect(host='snmp-psql', database='${POSTGRES_DB:-snmptraps}', user='${POSTGRES_USER:-snmpuser}', password='${POSTGRES_PASSWORD:-snmppass}')"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+
 
   grafana:
     image: grafana/grafana:12.0.1

@@ -71,7 +71,7 @@ class TrapProcessor:
                 # First check if topic exists or create it
                 if not self._kafka_topic_exists('snmp_traps'):
                     self.logger.warning("Topic 'snmp_traps' not found - attempting to create")
-                    self._create_kafka_topic('snmp_traps', num_partitions=1, replication_factor=1)
+                    self._create_kafka_topic('snmp_traps', num_partitions=8, replication_factor=1)
                     self.logger.info("Topic 'snmp_traps' created successfully")
 
                 # Now initialize consumer
@@ -200,7 +200,16 @@ class TrapProcessor:
 
                 # Substring match to populate flattened fields
                 if 'alarmseverity' in resolved_lower:
-                    severity = value.lower()
+                    value_lower = value.lower()
+
+                    if any(s in value_lower for s in ('clear', 'minor', 'major', 'critical')):
+                        for s in ('clear', 'minor', 'major', 'critical'):
+                            if s in value_lower:
+                                severity = s
+                                break
+                    else:
+                        severity = 'unknown'
+
                 elif 'alarmnumber' in resolved_lower:
                     alarm_number = value
                 elif 'alarmtext' in resolved_lower:

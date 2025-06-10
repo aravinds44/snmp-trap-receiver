@@ -1,0 +1,11 @@
+docker pull postgres:15-alpine
+docker pull grafana/grafana:12.0.1
+docker pull confluentinc/cp-zookeeper:7.4.0
+docker pull confluentinc/cp-kafka:7.4.0
+docker pull nginx:stable-alpine
+
+
+"python", "-c", "import psycopg2; psycopg2.connect(host='snmp-psql', database='${POSTGRES_DB:-snmptraps}', user='${POSTGRES_USER:-snmpuser}', password='${POSTGRES_PASSWORD:-snmppass123}')"]
+
+
+python3 -c "import psycopg2; psycopg2.connect(host='snmp-psql', database='snmptraps', user='snmpuser', password='snmppass123')"
