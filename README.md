@@ -55,7 +55,7 @@ Easily spin up the full stack with a single command.
 
 ## Run the Stack
 ```shell
-git clone https://github.com/yourorg/snmp-trap-receiver.git
+git clone https://github.com/aravinds44/snmp-trap-receiver.git
 cd snmp-trap-receiver/src
 
 # Start the stack
