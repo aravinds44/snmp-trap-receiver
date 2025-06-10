@@ -1,6 +1,7 @@
 # SNMP Trap Receiver System
 
 A production-ready, modular SNMP Trap Receiver system designed for high-throughput environments. This architecture captures SNMPv3 traps, resolves OIDs using custom MIBs, publishes parsed data to Kafka, and stores it in a PostgreSQL database with Grafana for real-time observability.
+---
 ![img.png](img.png)
 ---
 ## 🧩 Architecture Overview
